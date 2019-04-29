@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "staging": "teru2blog-staging",
+    "production": "teru2blog"
+  }
+}
