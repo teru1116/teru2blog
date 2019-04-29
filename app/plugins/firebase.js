@@ -13,6 +13,4 @@ firebase.initializeApp({
   messagingSenderId: process.env.firebaseMessagingSenderId
 })
 
-console.log(process.env.firebaseApiKey)
-
 Vue.prototype.$firebase = firebase
