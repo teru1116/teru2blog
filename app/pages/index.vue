@@ -30,6 +30,9 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
+  },
+  async created () {
+    await this.$firebase.auth().signInAnonymously()
   }
 }
 </script>
