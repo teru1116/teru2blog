@@ -1,25 +1,20 @@
 /*
-** Firebaseセットアップ処理群
+** Firebaseオブジェクト初期化処理
 */
 import Vue from 'vue'
 import firebase from 'firebase'
 
-export default context => {
-  firebase.initializeApp({
-    apiKey: process.env.firebaseApiKey,
-    authDomain: process.env.firebaseAuthDomain,
-    databaseURL: process.env.firebaseDatabaseURL,
-    projectId: process.env.firebaseProjectId,
-    storageBucket: process.env.firebaseStorageBucket,
-    messagingSenderId: process.env.firebaseMessagingSenderId
-  })
+firebase.initializeApp({
+  apiKey: process.env.firebaseApiKey || 'AIzaSyBmQDrA-OZtpbf-SItU9KvToOpBXOUgYng',
+  authDomain: process.env.firebaseAuthDomain || 'teru2blog-staging.firebaseapp.com',
+  databaseURL: process.env.firebaseDatabaseURL || 'https://teru2blog-staging.firebaseio.com',
+  projectId: process.env.firebaseProjectId || 'teru2blog-staging',
+  storageBucket: process.env.firebaseStorageBucket || 'teru2blog-staging.appspot.com',
+  messagingSenderId: process.env.firebaseMessagingSenderId || '634375775324'
+})
 
-  // 初期化後のFirebaseオブジェクトを、アプリケーション全体で利用できるようにする
-  Vue.prototype.$firebase = firebase
+// 初期化後のFirebaseオブジェクトを、全てのVueコンポーネントから利用できるようにする
+Vue.prototype.$firebase = firebase
 
-  // 認証完了時の処理を登録
-  firebase.auth().onAuthStateChanged(user => {
-    // UserオブジェクトをVuexストアにセット
-    context.store.dispatch('user/updateUser', user)
-  })
-}
+// Vuexストアからも利用できるようexport
+export default firebase

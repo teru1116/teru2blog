@@ -1,3 +1,7 @@
+import firebase from './../plugins/firebase'
+
+const db = firebase.firestore()
+
 const state = () => ({
   list: new Map()
 })
@@ -8,7 +12,9 @@ const getters = {
 
 const mutations = {
   addMessage (state, payload) {
-    state.list.set(payload.id, payload.message)
+    const message = payload.message
+    message.status = 'sending'
+    state.list.set(payload.id, message)
   },
 
   sendMessage (state, payload) {
@@ -23,12 +29,14 @@ const actions = {
     commit('addMessage', { id, message })
   },
 
-  sendMessage ({ commit }, { id, message}) {
-    commit('sendMessage', { id, message })
+  async sendMessage ({ commit }, { id, message }) {
+    delete message.status
+    await db.collection('rooms').doc('1qazxsw2').collection('messages').doc(id).set(message)
+    commit('sendMessage', { id })
   }
 }
 
-module.exports = {
+export default {
   state,
   getters,
   mutations,

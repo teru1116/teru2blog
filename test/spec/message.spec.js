@@ -23,25 +23,23 @@ describe('store/message.js', () => {
       store.dispatch('addMessage', {
         id,
         message: {
-          text: 'ADD_MESSAGE',
-          status: 'sending'
+          text: 'ADD_MESSAGE'
         }
       })
       expect(store.getters['list'].get(id).text).toBe('ADD_MESSAGE')
     })
   
-    test('サーバへの送信が成功した時、送信中だったメッセージが送信完了に変わっていること', () => {
+    test('サーバへの送信が成功した時、送信中だったメッセージが送信完了に変わっていること', async () => {
       // 送信中のメッセージがすでにストアに存在している状態にする
       const id = v4()
       const message = {
-        text: 'UPDATE_STATUS',
-        status: 'sending'
+        text: 'UPDATE_STATUS'
       }
       store.dispatch('addMessage', { id, message })
       expect(store.getters['list'].get(id).text).toBe('UPDATE_STATUS')
 
       // サーバへのメッセージ送信を実行する
-      store.dispatch('sendMessage', { id, message })
+      await store.dispatch('sendMessage', { id, message })
 
       // 最初のメッセージのステータスが送信済みに変わっていること
       expect(store.getters['list'].get(id).status).toBe('sent')
