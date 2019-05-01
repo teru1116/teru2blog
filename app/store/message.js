@@ -17,7 +17,7 @@ const mutations = {
     state.list.set(payload.messageId, message)
   },
 
-  sendMessage (state, payload) {
+  updateSentMessage (state, payload) {
     const message = state.list.get(payload.messageId)
     message.status = 'sent'
     message.createdDate = payload.createdDate
@@ -30,6 +30,12 @@ const mutations = {
 }
 
 const actions = {
+  // メッセージ送信時はこれを実行する
+  async addAndSendMessage ({ dispatch, state, getters }, { roomId, messageId, message }) {
+    dispatch('addMessage', { messageId, message })
+    await dispatch('sendMessage', { roomId, messageId, message })
+  },
+
   // メッセージをストアに追加する（DBには送信しない）
   addMessage ({ commit }, { messageId, message }) {
     commit('addMessage', { messageId, message })
@@ -43,7 +49,7 @@ const actions = {
     await ref.set(message)
     const doc = await ref.get()
     const createdDate = doc.data().createdDate
-    commit('sendMessage', { messageId, createdDate })
+    commit('updateSentMessage', { messageId, createdDate })
   },
 
   // roomIdを指定すると、DBのメッセージ履歴をストアに反映する

@@ -42,7 +42,7 @@ describe('store/message.js', () => {
       await batch.commit()
     })
     
-    test('ユーザーが送信ボタンを押した時、サーバへの送信成功を待たずして、フロント側でメッセージ(送信中)が追加されていること', () => {
+    test('ユーザーが送信ボタンを押した時、サーバへの送信成功を待たずして、ストアにメッセージ(送信中)が追加されていること', () => {
       expect(store.getters['list'].size).toBe(0)
 
       const messageId = v4()
@@ -53,6 +53,17 @@ describe('store/message.js', () => {
 
       expect(store.getters['list'].size).toBe(1)
       expect(store.getters['list'].get(messageId).text).toBe('ADD_MESSAGE')
+    })
+
+    test('ストアに追加したメッセージが送信されていること', async () => {
+      const messageId = v4()
+      const message = {
+        text: 'SEND_MESSAGE'
+      }
+
+      await store.dispatch('addAndSendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
+
+      expect(store.getters['list'].get(messageId).status).toBe('sent')
     })
   
     test('サーバへの送信が成功した時、メッセージのステータスが送信中から送信完了に変わること', async () => {
