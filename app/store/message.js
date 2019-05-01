@@ -1,5 +1,3 @@
-import v4 from 'uuid/v4'
-
 const state = () => ({
   list: new Map()
 })
@@ -15,8 +13,7 @@ const mutations = {
 }
 
 const actions = {
-  addMessage ({ commit }, message) {
-    const id = v4()
+  addMessage ({ commit }, { id, message }) {
     commit('addMessage', { id, message })
   }
 }
