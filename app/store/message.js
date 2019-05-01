@@ -31,7 +31,7 @@ const actions = {
 
   async sendMessage ({ commit }, { id, message }) {
     delete message.status
-    await db.collection('rooms').doc('1qazxsw2').collection('messages').doc(id).set(message)
+    await db.collection('rooms').doc('TEST_ROOM').collection('messages').doc(id).set(message)
     commit('sendMessage', { id })
   }
 }

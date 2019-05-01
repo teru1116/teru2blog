@@ -16,5 +16,5 @@ firebase.initializeApp({
 // 初期化後のFirebaseオブジェクトを、全てのVueコンポーネントから利用できるようにする
 Vue.prototype.$firebase = firebase
 
-// Vuexストアからも利用できるようexport
+// Vueコンポーネント以外（VuexストアなどのJavaScriptファイル）からも利用できるように、exportする
 export default firebase

@@ -32,7 +32,8 @@ export default {
     Logo
   },
   async created () {
-    await this.$firebase.auth().signInAnonymously()
+    const user = await this.$firebase.auth().signInAnonymously()
+    this.$store.dispatch('user/updateUser', user)
   }
 }
 </script>
