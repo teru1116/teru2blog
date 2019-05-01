@@ -14,25 +14,25 @@ const mutations = {
   addMessage (state, payload) {
     const message = payload.message
     message.status = 'sending'
-    state.list.set(payload.id, message)
+    state.list.set(payload.messageId, message)
   },
 
   sendMessage (state, payload) {
-    const message = state.list.get(payload.id)
+    const message = state.list.get(payload.messageId)
     message.status = 'sent'
-    state.list.set(payload.id, message)
+    state.list.set(payload.messageId, message)
   }
 }
 
 const actions = {
-  addMessage ({ commit }, { id, message }) {
-    commit('addMessage', { id, message })
+  addMessage ({ commit }, { messageId, message }) {
+    commit('addMessage', { messageId, message })
   },
 
-  async sendMessage ({ commit }, { id, message }) {
+  async sendMessage ({ commit }, { roomId, messageId, message }) {
     delete message.status
-    await db.collection('rooms').doc('TEST_ROOM').collection('messages').doc(id).set(message)
-    commit('sendMessage', { id })
+    await db.collection('rooms').doc(roomId).collection('messages').doc(messageId).set(message)
+    commit('sendMessage', { messageId })
   }
 }
 
