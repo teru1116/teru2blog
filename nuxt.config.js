@@ -1,7 +1,7 @@
 import pkg from './package'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   srcDir: 'app',
   env: {
     firebaseApiKey: process.env.FIREBASE_API_KEY || 'AIzaSyBmQDrA-OZtpbf-SItU9KvToOpBXOUgYng',
@@ -72,7 +72,7 @@ export default {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
+          // loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
       }

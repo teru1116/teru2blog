@@ -1,6 +1,7 @@
 {
   "projects": {
     "staging": "teru2blog-staging",
-    "production": "teru2blog"
+    "production": "teru2blog",
+    "default": "teru2blog-staging"
   }
 }
