@@ -15,17 +15,37 @@ describe('store/message.js', () => {
   })
 
   describe('メッセージ送信', () => {
-    const id = v4()
-    const message = {
-      text: 'TEST_MESSAGE',
-      createdDate: new Date(),
-      status: 'sending'
-    }
-
+    
     test('ユーザーが送信ボタンを押した時、サーバへの送信成功を待たずに、フロント側でメッセージ(送信中)が追加されていること', () => {
       expect(store.getters['list'].size).toBe(0)
-      store.dispatch('addMessage', { id, message })
-      expect(store.getters['list'].get(id).text).toBe('TEST_MESSAGE')
+
+      const id = v4()
+      store.dispatch('addMessage', {
+        id,
+        message: {
+          text: 'ADD_MESSAGE',
+          status: 'sending'
+        }
+      })
+      expect(store.getters['list'].get(id).text).toBe('ADD_MESSAGE')
     })
+  
+    test('サーバへの送信が成功した時、送信中だったメッセージが送信完了に変わっていること', () => {
+      // 送信中のメッセージがすでにストアに存在している状態にする
+      const id = v4()
+      const message = {
+        text: 'UPDATE_STATUS',
+        status: 'sending'
+      }
+      store.dispatch('addMessage', { id, message })
+      expect(store.getters['list'].get(id).text).toBe('UPDATE_STATUS')
+
+      // サーバへのメッセージ送信を実行する
+      store.dispatch('sendMessage', { id, message })
+
+      // 最初のメッセージのステータスが送信済みに変わっていること
+      expect(store.getters['list'].get(id).status).toBe('sent')
+    })
+
   })
 })
