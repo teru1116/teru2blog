@@ -20,6 +20,7 @@ const mutations = {
   sendMessage (state, payload) {
     const message = state.list.get(payload.messageId)
     message.status = 'sent'
+    message.createdDate = payload.createdDate
     state.list.set(payload.messageId, message)
   },
 
@@ -37,8 +38,12 @@ const actions = {
   // すでにストアに存在しているメッセージを、DBに送信する
   async sendMessage ({ commit }, { roomId, messageId, message }) {
     delete message.status
-    await db.collection('rooms').doc(roomId).collection('messages').doc(messageId).set(message)
-    commit('sendMessage', { messageId })
+    message['createdDate'] = firebase.firestore.FieldValue.serverTimestamp()
+    const ref = db.collection('rooms').doc(roomId).collection('messages').doc(messageId)
+    await ref.set(message)
+    const doc = await ref.get()
+    const createdDate = doc.data().createdDate
+    commit('sendMessage', { messageId, createdDate })
   },
 
   // roomIdを指定すると、DBのメッセージ履歴をストアに反映する

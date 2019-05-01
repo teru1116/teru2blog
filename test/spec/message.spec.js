@@ -46,31 +46,45 @@ describe('store/message.js', () => {
       expect(store.getters['list'].size).toBe(0)
 
       const messageId = v4()
-      store.dispatch('addMessage', {
-        messageId,
-        message: {
-          text: 'ADD_MESSAGE'
-        }
-      })
+      const message = {
+        text: 'ADD_MESSAGE'
+      }
+      store.dispatch('addMessage', { messageId, message })
 
       expect(store.getters['list'].size).toBe(1)
       expect(store.getters['list'].get(messageId).text).toBe('ADD_MESSAGE')
     })
   
-    test('サーバへの送信が成功した時、送信中だったメッセージが送信完了に変わっていること', async () => {
+    test('サーバへの送信が成功した時、メッセージのステータスが送信中から送信完了に変わること', async () => {
       // 送信中のメッセージがすでにストアに存在している状態にする
       const messageId = v4()
       const message = {
         text: 'UPDATE_STATUS'
       }
       store.dispatch('addMessage', { messageId, message })
-      expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
 
-      // サーバへのメッセージ送信を実行する
+      expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
+      expect(store.getters['list'].get(messageId).status).toBe('sending')
+
       await store.dispatch('sendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
 
-      // 上のメッセージのステータスが送信済みに変わっていること
       expect(store.getters['list'].get(messageId).status).toBe('sent')
+    })
+
+    test('サーバへの送信が成功した時、メッセージに送信時刻がセットされていること', async () => {
+      // 送信中のメッセージがすでにストアに存在している状態にする
+      const messageId = v4()
+      const message = {
+        text: 'UPDATE_STATUS'
+      }
+      store.dispatch('addMessage', { messageId, message })
+
+      expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
+      expect(store.getters['list'].get(messageId).createdDate).toBeUndefined
+
+      await store.dispatch('sendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
+
+      expect(store.getters['list'].get(messageId).createdDate).toBeTruthy()
     })
 
     test('ルームIDが与えられると、DBのメッセージ履歴がストアに展開されること', async () => {
