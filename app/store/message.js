@@ -21,6 +21,10 @@ const mutations = {
     const message = state.list.get(payload.messageId)
     message.status = 'sent'
     state.list.set(payload.messageId, message)
+  },
+
+  setAllMessages (state, payload) {
+    state.list = payload
   }
 }
 
@@ -33,6 +37,15 @@ const actions = {
     delete message.status
     await db.collection('rooms').doc(roomId).collection('messages').doc(messageId).set(message)
     commit('sendMessage', { messageId })
+  },
+
+  async fetchAllMessages ({ commit }, roomId) {
+    let messages = new Map()
+    const snapshot = await db.collection('rooms').doc(roomId).collection('messages').get()
+    snapshot.forEach(doc => {
+      messages.set(doc.id, doc.data())
+    })
+    commit('setAllMessages', messages)
   }
 }
 

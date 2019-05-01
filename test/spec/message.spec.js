@@ -19,15 +19,26 @@ describe('store/message.js', () => {
 
     beforeAll(async () => {
       const db = firebase.firestore()
-      // DBの送信テスト用ルームのメッセージ数を0件にする
-      //
-      // DBの取得テスト用ルームのメッセージ数を5件にする
       const batch = db.batch()
+
+      // DBの送信テスト用ルームのメッセージ数を0件にする
+      const sSnapshot = await db.collection('rooms').doc('ROOM_FOR_SEND_TEST').collection('messages').get()
+      sSnapshot.forEach(doc => {
+        batch.delete(doc.ref)
+      })
+
+      // DBの取得テスト用ルームのメッセージ数を5件にする
+      const fSnapshot = await db.collection('rooms').doc('ROOM_FOR_FETCH_TEST').collection('messages').get()
+      fSnapshot.forEach(doc => {
+        batch.delete(doc.ref)
+      })
+
       for (let index = 0; index < 5; index++) {
         const messageId = v4()
         const message = { text: `MESSAGE_${index}` }
         batch.set(db.collection('rooms').doc('ROOM_FOR_FETCH_TEST').collection('messages').doc(messageId), message)
       }
+
       await batch.commit()
     })
     
@@ -60,11 +71,11 @@ describe('store/message.js', () => {
       expect(store.getters['list'].get(messageId).status).toBe('sent')
     })
 
-    test('ルームIDが与えると、DBのメッセージ履歴がストアに展開されること', () => {
+    test('ルームIDが与えられると、DBのメッセージ履歴がストアに展開されること', async () => {
       expect(store.getters['list'].size).toBe(0)
 
       const roomId = 'ROOM_FOR_FETCH_TEST'
-      store.dispatch('fetchMessages', roomId)
+      await store.dispatch('fetchAllMessages', roomId)
 
       expect(store.getters['list'].size).toBe(5)
     })
