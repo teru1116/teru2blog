@@ -125,7 +125,7 @@ describe('store/message.js', () => {
     expect(store.getters['list'].size).toBe(5)
   })
 
-  test('リッスン開始後、裏からDBにメッセージを追加すると、ストアに反映されていること', () => {
+  test('リッスン開始後、裏からDBにメッセージを追加すると、ストアに反映されていること', async () => {
     expect(store.getters['list'].size).toBe(0)
 
     const roomId = roomIdForListenTest
@@ -135,10 +135,11 @@ describe('store/message.js', () => {
     }
 
     store.dispatch('listenAllMessages', roomId)
-    store.dispatch('sendMessage', { roomId, messageId, message })
+
+    await db.collection('rooms').doc(roomIdForListenTest).collection('messages').doc(messageId).set(message)
 
     expect(store.getters['list'].size).toBe(1)
-    expect(store.getters['list'].get(messageId).text).toBe('')
+    expect(store.getters['list'].get(messageId).text).toBe('LISTEN_MESSAGE')
   })
 
   afterAll(async () => {
@@ -161,6 +162,9 @@ describe('store/message.js', () => {
     })
 
     await batch.commit()
+
+    // clear Vuex Store
+    store.dispatch('clearState')
   })
 
 })

@@ -2,9 +2,11 @@ import firebase from './../plugins/firebase'
 
 const db = firebase.firestore()
 
-const state = () => ({
+const defaultState = () => ({
   list: new Map()
 })
+
+const state = defaultState()
 
 const getters = {
   list: (state) => state.list
@@ -19,13 +21,17 @@ const mutations = {
 
   updateSentMessage (state, payload) {
     const message = state.list.get(payload.messageId)
-    message.status = 'sent'
+    message.status = payload.status
     message.createdDate = payload.createdDate
     state.list.set(payload.messageId, message)
   },
 
   setAllMessages (state, payload) {
     state.list = payload
+  },
+
+  clearState (state) {
+    Object.assign(state, defaultState())
   }
 }
 
@@ -38,7 +44,7 @@ const actions = {
 
   // メッセージをストアに追加する（DBには送信しない）
   addMessage ({ commit }, { messageId, message }) {
-    commit('addMessage', { messageId, message })
+    commit('addMessage', { messageId, message, status: 'sending' })
   },
 
   // すでにストアに存在しているメッセージを、DBに送信する
@@ -49,7 +55,7 @@ const actions = {
     await ref.set(message)
     const doc = await ref.get()
     const createdDate = doc.data().createdDate.toDate()
-    commit('updateSentMessage', { messageId, createdDate })
+    commit('updateSentMessage', { messageId, createdDate, status: 'sent' })
   },
 
   // 指定したroomIdのメッセージを全取得してストアにセットする
@@ -62,6 +68,23 @@ const actions = {
       messages.set(doc.id, message)
     })
     commit('setAllMessages', messages)
+  },
+
+  listenAllMessages ({ commit }, roomId) {
+    db.collection('rooms').doc(roomId).collection('messages')
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const messageId = change.doc.id
+            const message = change.doc.data()
+            commit('addMessage', { messageId, message, status: 'sent' })
+          }
+        })
+      })
+  },
+
+  clearState ({ commit }) {
+    commit('clearState')
   }
 }
 
