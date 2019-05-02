@@ -1,39 +1,21 @@
 <template>
   <section class="container">
     <div>
-      <logo />
-      <h1 class="title">
-        teru2blog
-      </h1>
-      <h2 class="subtitle">
-        My blog website implemented in Nuxt.js and Firebase
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
+      <ChatWidget/>
     </div>
   </section>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import ChatWidget from '~/components/ChatWidget'
 
 export default {
   components: {
-    Logo
+    ChatWidget
   },
   async created () {
-    const user = await this.$firebase.auth().signInAnonymously()
-    this.$store.dispatch('user/updateUser', user)
+    const userCredential = await this.$firebase.auth().signInAnonymously()
+    this.$store.dispatch('user/updateUser', userCredential)
   }
 }
 </script>

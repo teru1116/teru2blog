@@ -1,15 +1,21 @@
-export const state = () => ({
+const state = () => ({
   uid: ''
 })
 
-export const mutations = {
+const mutations = {
   updateUser (state, payload) {
-    state.uid = payload.uid
+    state.uid = payload.user.uid
   }
 }
 
-export const actions = {
-  updateUser ({ commit }, user) {
-    commit('updateUser', user)
+const actions = {
+  updateUser ({ commit }, userCredential) {
+    commit('updateUser', userCredential)
   }
+}
+
+export default {
+  state,
+  mutations,
+  actions
 }

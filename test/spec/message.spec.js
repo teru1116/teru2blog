@@ -8,6 +8,10 @@ import firebase from './../../app/plugins/firebase'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const roomIdForSendTest = 'ROOM_FOR_SEND_TEST'
+// const roomIdForFetchTest = 'ROOM_FOR_FETCH_TEST'
+const roomIdForFetchTest = 'RHJhVpVgpNeTWvYaT6sjupYMzOm2'
+
 describe('store/message.js', () => {
   let store
 
@@ -22,21 +26,25 @@ describe('store/message.js', () => {
       const batch = db.batch()
 
       // DBの送信テスト用ルームのメッセージ数を0件にする
-      const sSnapshot = await db.collection('rooms').doc('ROOM_FOR_SEND_TEST').collection('messages').get()
+      const sSnapshot = await db.collection('rooms').doc(roomIdForSendTest).collection('messages').get()
       sSnapshot.forEach(doc => {
         batch.delete(doc.ref)
       })
 
       // DBの取得テスト用ルームのメッセージ数を5件にする
-      const fSnapshot = await db.collection('rooms').doc('ROOM_FOR_FETCH_TEST').collection('messages').get()
+      const fSnapshot = await db.collection('rooms').doc(roomIdForFetchTest).collection('messages').get()
       fSnapshot.forEach(doc => {
         batch.delete(doc.ref)
       })
 
       for (let index = 0; index < 5; index++) {
         const messageId = v4()
-        const message = { text: `MESSAGE_${index}` }
-        batch.set(db.collection('rooms').doc('ROOM_FOR_FETCH_TEST').collection('messages').doc(messageId), message)
+        const message = {
+          uid: (index % 2 === 0) ? '12345' : roomIdForFetchTest,
+          text: `MESSAGE_${index}`,
+          createdDate: firebase.firestore.FieldValue.serverTimestamp()
+        }
+        batch.set(db.collection('rooms').doc(roomIdForFetchTest).collection('messages').doc(messageId), message)
       }
 
       await batch.commit()
@@ -61,7 +69,7 @@ describe('store/message.js', () => {
         text: 'SEND_MESSAGE'
       }
 
-      await store.dispatch('addAndSendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
+      await store.dispatch('addAndSendMessage', { roomId: roomIdForSendTest, messageId, message })
 
       expect(store.getters['list'].get(messageId).status).toBe('sent')
     })
@@ -77,7 +85,7 @@ describe('store/message.js', () => {
       expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
       expect(store.getters['list'].get(messageId).status).toBe('sending')
 
-      await store.dispatch('sendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
+      await store.dispatch('sendMessage', { roomId: roomIdForSendTest, messageId, message })
 
       expect(store.getters['list'].get(messageId).status).toBe('sent')
     })
@@ -93,7 +101,7 @@ describe('store/message.js', () => {
       expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
       expect(store.getters['list'].get(messageId).createdDate).toBeUndefined
 
-      await store.dispatch('sendMessage', { roomId: 'ROOM_FOR_SEND_TEST', messageId, message })
+      await store.dispatch('sendMessage', { roomId: roomIdForSendTest, messageId, message })
 
       expect(store.getters['list'].get(messageId).createdDate).toBeTruthy()
     })
@@ -101,7 +109,7 @@ describe('store/message.js', () => {
     test('ルームIDが与えられると、DBのメッセージ履歴がストアに展開されること', async () => {
       expect(store.getters['list'].size).toBe(0)
 
-      const roomId = 'ROOM_FOR_FETCH_TEST'
+      const roomId = roomIdForFetchTest
       await store.dispatch('fetchAllMessages', roomId)
 
       expect(store.getters['list'].size).toBe(5)

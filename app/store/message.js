@@ -30,8 +30,8 @@ const mutations = {
 }
 
 const actions = {
-  // メッセージ送信時はこれを実行する
-  async addAndSendMessage ({ dispatch, state, getters }, { roomId, messageId, message }) {
+  // メッセージ送信時はこれを実行する（メッセージのストアへの追加とDBへの送信を行う）
+  async addAndSendMessage ({ dispatch }, { roomId, messageId, message }) {
     dispatch('addMessage', { messageId, message })
     await dispatch('sendMessage', { roomId, messageId, message })
   },
@@ -48,16 +48,18 @@ const actions = {
     const ref = db.collection('rooms').doc(roomId).collection('messages').doc(messageId)
     await ref.set(message)
     const doc = await ref.get()
-    const createdDate = doc.data().createdDate
+    const createdDate = doc.data().createdDate.toDate()
     commit('updateSentMessage', { messageId, createdDate })
   },
 
-  // roomIdを指定すると、DBのメッセージ履歴をストアに反映する
+  // 指定したroomIdのメッセージを全取得してストアにセットする
   async fetchAllMessages ({ commit }, roomId) {
     let messages = new Map()
     const snapshot = await db.collection('rooms').doc(roomId).collection('messages').get()
     snapshot.forEach(doc => {
-      messages.set(doc.id, doc.data())
+      const message = Object.assign(doc.data(), { status: 'sent' })
+      message.createdDate = doc.data().createdDate.toDate()
+      messages.set(doc.id, message)
     })
     commit('setAllMessages', messages)
   }
