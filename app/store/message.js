@@ -24,12 +24,13 @@ const mutations = {
   addReceivedMessage (state, payload) {
     const message = payload
     message.status = 'sent'
+    console.log(message.createdDate)
     state.messages.push(message)
   },
 
-  updatedMessage (state, payload) {
+  updateMessage (state, payload) {
     // ストアの中から、送信成功したメッセージを、最新から順に線形探索
-    for (let index = state.messages.length - 1; index === 0; index--) {
+    for (let index = state.messages.length - 1; index >= 0; index--) {
       let currentMessage = state.messages[index]
       if (currentMessage.id === payload.id) {
         const message = payload
@@ -75,7 +76,7 @@ const actions = {
     const doc = await ref.get()
     const fetchedMessage = Object.assign({ id: doc.id }, doc.data())
     fetchedMessage.createdDate = doc.data().createdDate.toDate()
-    commit('updatedMessage', fetchedMessage)
+    commit('updateMessage', fetchedMessage)
   },
 
   // 指定したroomIdのメッセージを全取得してストアにセットする
@@ -95,17 +96,21 @@ const actions = {
     db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
+          const message = Object.assign({ id: change.doc.id }, change.doc.data())
+          if (change.doc.data().createdDate) {
+            message.createdDate = change.doc.data().createdDate.toDate()
+          }
           if (change.type === 'added') {
-            const message = Object.assign({ id: change.doc.id }, change.doc.data())
-            if (change.doc.data().createdDate) {
-              message.createdDate = change.doc.data().createdDate.toDate()
+            // 運営からのメッセージであれば、ストアに追加する
+            if (!message.uid || message.uid === 'admin') {
+              commit('addReceivedMessage', message)
+            // 自分のメッセージであれば、すでにストアに追加されているはずなのでupdate
+            } else {
+              commit('updateMessage', message)
             }
-            commit('addReceivedMessage', message)
           }
           if (change.type === "modified") {
-            const message = Object.assign({ id: change.doc.id }, change.doc.data())
-            message.createdDate = change.doc.data().createdDate.toDate()
-            commit('updatedMessage', message)
+            commit('updateMessage', message)
           }
         })
       })
