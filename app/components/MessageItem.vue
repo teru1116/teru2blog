@@ -57,6 +57,11 @@ export default {
     border-radius: 4px;
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
+    p {
+      white-space: pre-wrap;
+      text-align: left;
+      line-height: 1.2;
+    }
   }
   time {
     font-size: 12px;
