@@ -1,10 +1,11 @@
 import firebase from './../plugins/firebase'
 
 const db = firebase.firestore()
+let listenStartTime
 
 const defaultState = () => {
   return {
-    messages: []
+    messages: [],
   }
 }
 
@@ -24,7 +25,6 @@ const mutations = {
   addReceivedMessage (state, payload) {
     const message = payload
     message.status = 'sent'
-    console.log(message.createdDate)
     state.messages.push(message)
   },
 
@@ -93,6 +93,7 @@ const actions = {
   },
 
   listenAllMessages ({ commit }, roomId) {
+    listenStartTime = new Date()
     db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
@@ -101,12 +102,18 @@ const actions = {
             message.createdDate = change.doc.data().createdDate.toDate()
           }
           if (change.type === 'added') {
-            // 運営からのメッセージであれば、ストアに追加する
-            if (!message.uid || message.uid === 'admin') {
+            // リッスン開始時間より前に登録されたメッセージであれば、ストアに追加する
+            if (message.createdDate && message.createdDate < listenStartTime) {
               commit('addReceivedMessage', message)
-            // 自分のメッセージであれば、すでにストアに追加されているはずなのでupdate
+            // リッスン開始時間より後に登録されたメッセージ = 自身が入室した後で新たに登録されたメッセージ
             } else {
-              commit('updateMessage', message)
+              // 運営からのメッセージであれば、ストアに追加する
+              if (!message.uid || message.uid === 'admin') {
+                commit('addReceivedMessage', message)
+              // 自分のメッセージであれば、すでにストアに追加されているはずなのでupdate
+              } else {
+                commit('updateMessage', message)
+              }
             }
           }
           if (change.type === "modified") {

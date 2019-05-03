@@ -59,8 +59,7 @@ export default {
   watch: {
     user: {
       handler (newUser) {
-        // ストアのユーザー情報が更新されたら、メッセージを全取得する
-        this.$store.dispatch('message/fetchAllMessages', newUser.uid)
+        // ストアのユーザー情報が更新されたら、メッセージのリッスンを開始する
         this.$store.dispatch('message/listenAllMessages', newUser.uid)
       },
       deep: true
