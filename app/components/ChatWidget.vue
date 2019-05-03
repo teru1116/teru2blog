@@ -7,10 +7,11 @@
     </div>
     <div class="widget-body">
       <!-- チャット表示部 -->
-      <div class="messages-view">
+      <div
+        class="messages-view"
+        :style="{ height: `${messageViewHeight}px` }"
+      >
         <ul>
-          <!-- Vue.jsはMap型のリアクティブをサポートしていないため、ストア側でmessagesが変更されてもUIが更新されない -->
-          <!-- messages更新時に手動でフラグを立てるか、他のVue.jsがサポートしている型（ArrayかObject）を検討する -->
           <li v-for="(element, index) in message.messages" :key="index">
             <MessageItem
               :message="element"
@@ -19,11 +20,15 @@
         </ul>
       </div>
       <!-- チャット入力部 -->
-      <div class="input-footer">
+      <div
+        class="input-footer"
+        :style="{ height: `${footerHeight}px` }"
+      >
         <div class="textbox-wrapper">
           <AutogrowTextarea
             v-model="inputMessageText"
             placeholder="メッセージを入力"
+            v-on:onChangeHeight="onChangeTextareaHeight"
           />
         </div>
         <div class="sendbutton-wrapper">
@@ -40,6 +45,8 @@ import MessageItem from './MessageItem'
 import AutogrowTextarea from './AutogrowTextarea'
 import v4 from 'uuid/v4'
 
+const widgetBodyDefaultHeight = 350
+
 export default {
   components: {
     MessageItem,
@@ -49,11 +56,15 @@ export default {
     ...mapState([
       'user',
       'message'
-    ])
+    ]),
+    messageViewHeight () {
+      return widgetBodyDefaultHeight - this.footerHeight
+    }
   },
   data () {
     return {
-      inputMessageText: ''
+      inputMessageText: '',
+      footerHeight: 50
     }
   },
   watch: {
@@ -75,6 +86,9 @@ export default {
       }
       this.$store.dispatch('message/addAndSendMessage', { roomId, message })
       this.inputMessageText = ''
+    },
+    onChangeTextareaHeight (newVal) {
+      this.footerHeight = newVal + 18
     }
   }
 }
@@ -82,8 +96,10 @@ export default {
 
 <style lang="scss" scoped>
 .chat-widget {
+  position: fixed;
+  bottom: 0;
   @media screen and (min-width: 600px) {
-    width: 400px;
+    width: 300px;
   }
   @media screen and (max-width: 599px) {}
   .widget-header {
@@ -102,16 +118,15 @@ export default {
     .messages-view {
       padding: 0 8px;
       overflow: scroll;
-      @media screen and (min-width: 600px) {
-        height: 300px;
-      }
-      @media screen and (max-width: 599px) {
-        height: 300px;
+      ul {
+        padding: 8px 0 0;
+        li {
+          margin-bottom: 8px;
+        }
       }
     }
     .input-footer {
       display: flex;
-      height: 56px;
       border-top: 1px solid #e6e6e6;
       padding: 8px 8px;
       .textbox-wrapper {
@@ -124,9 +139,6 @@ export default {
       .sendbutton-wrapper {
         width: 64px;
         margin-left: 8px;
-        button {
-          //
-        }
       }
     }
   }

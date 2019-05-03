@@ -38,13 +38,18 @@ export default {
   computed: {
     textareaStyles () {
       return {
-        height: this.textareaHeight
+        height: `${this.textareaHeight}px`
       }
     }
   },
   data () {
     return {
-      textareaHeight: ''
+      textareaHeight: 0
+    }
+  },
+  watch: {
+    textareaHeight (newVal) {
+      this.$emit('onChangeHeight', newVal)
     }
   },
   methods: {
@@ -65,7 +70,7 @@ export default {
         newHeight = calculateContentHeight(this.$el, size)
       }
 
-      this.textareaHeight = newHeight + 'px'
+      this.textareaHeight = newHeight
     },
     getTextAreaLineSize () {
       const style = window.getComputedStyle(this.$el)
