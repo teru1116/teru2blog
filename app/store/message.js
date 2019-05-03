@@ -2,82 +2,110 @@ import firebase from './../plugins/firebase'
 
 const db = firebase.firestore()
 
-const defaultState = () => ({
-  list: new Map()
-})
+const defaultState = () => {
+  return {
+    messages: []
+  }
+}
 
 const state = defaultState()
 
 const getters = {
-  list: (state) => state.list
+  messages: (state) => state.messages
 }
 
 const mutations = {
-  addMessage (state, payload) {
-    const message = payload.message
+  addSendingMessage (state, payload) {
+    const message = payload
     message.status = 'sending'
-    state.list.set(payload.messageId, message)
+    state.messages.push(message)
   },
 
-  updateSentMessage (state, payload) {
-    const message = state.list.get(payload.messageId)
-    message.status = payload.status
-    message.createdDate = payload.createdDate
-    state.list.set(payload.messageId, message)
+  addReceivedMessage (state, payload) {
+    const message = payload
+    message.status = 'sent'
+    state.messages.push(message)
+  },
+
+  updatedMessage (state, payload) {
+    // ストアの中から、送信成功したメッセージを、最新から順に線形探索
+    for (let index = state.messages.length - 1; index === 0; index--) {
+      let currentMessage = state.messages[index]
+      if (currentMessage.id === payload.id) {
+        const message = payload
+        message.status = 'sent'
+        state.messages.splice(index, 1, message)
+        break
+      }
+    }
   },
 
   setAllMessages (state, payload) {
-    state.list = payload
+    state.messages = payload
   },
 
   clearState (state) {
-    Object.assign(state, defaultState())
+    state = Object.assign(state, defaultState())
   }
 }
 
 const actions = {
   // メッセージ送信時はこれを実行する（メッセージのストアへの追加とDBへの送信を行う）
-  async addAndSendMessage ({ dispatch }, { roomId, messageId, message }) {
-    dispatch('addMessage', { messageId, message })
-    await dispatch('sendMessage', { roomId, messageId, message })
+  async addAndSendMessage ({ dispatch }, { roomId, message }) {
+    dispatch('addSendingMessage', message)
+    await dispatch('sendMessage', { roomId, message })
   },
 
-  // メッセージをストアに追加する（DBには送信しない）
-  addMessage ({ commit }, { messageId, message }) {
-    commit('addMessage', { messageId, message, status: 'sending' })
+  // 送信しようとしているメッセージをローカルで追加する
+  addSendingMessage ({ commit }, message) {
+    commit('addSendingMessage', message)
+  },
+
+  // 受信したメッセージをストアに追加する
+  addReceivedMessage ({ commit }, message) {
+    commit('addReceivedMessage', message)
   },
 
   // すでにストアに存在しているメッセージを、DBに送信する
-  async sendMessage ({ commit }, { roomId, messageId, message }) {
+  async sendMessage ({ commit }, { roomId, message }) {
     delete message.status
     message['createdDate'] = firebase.firestore.FieldValue.serverTimestamp()
-    const ref = db.collection('rooms').doc(roomId).collection('messages').doc(messageId)
+    const ref = db.collection('rooms').doc(roomId).collection('messages').doc(message.id)
     await ref.set(message)
     const doc = await ref.get()
-    const createdDate = doc.data().createdDate.toDate()
-    commit('updateSentMessage', { messageId, createdDate, status: 'sent' })
+    const fetchedMessage = Object.assign({ id: doc.id }, doc.data())
+    fetchedMessage.createdDate = doc.data().createdDate.toDate()
+    commit('updatedMessage', fetchedMessage)
   },
 
   // 指定したroomIdのメッセージを全取得してストアにセットする
   async fetchAllMessages ({ commit }, roomId) {
-    let messages = new Map()
-    const snapshot = await db.collection('rooms').doc(roomId).collection('messages').get()
+    let messages = []
+    const snapshot = await db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate').get()
     snapshot.forEach(doc => {
-      const message = Object.assign(doc.data(), { status: 'sent' })
+      const message = Object.assign({ id: doc.id }, doc.data())
+      message.status = 'sent'
       message.createdDate = doc.data().createdDate.toDate()
-      messages.set(doc.id, message)
+      messages.push(message)
     })
     commit('setAllMessages', messages)
   },
 
   listenAllMessages ({ commit }, roomId) {
-    db.collection('rooms').doc(roomId).collection('messages')
+    db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
           if (change.type === 'added') {
-            const messageId = change.doc.id
-            const message = change.doc.data()
-            commit('addMessage', { messageId, message, status: 'sent' })
+            const message = Object.assign({ id: change.doc.id }, change.doc.data())
+            if (change.doc.data().createdDate) {
+              message.createdDate = change.doc.data().createdDate.toDate()
+            }
+            commit('addReceivedMessage', message)
+          }
+          if (change.type === "modified") {
+            const message = Object.assign({ id: change.doc.id }, change.doc.data())
+            message.createdDate = change.doc.data().createdDate.toDate()
+            commit('updatedMessage', message)
           }
         })
       })

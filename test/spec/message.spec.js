@@ -56,90 +56,101 @@ describe('store/message.js', () => {
       batch.delete(doc.ref)
     })
 
+    batch.commit()
+
     // clear Vuex Store
     store.dispatch('clearState')
   })
   
   test('ユーザーが送信ボタンを押した時、サーバへの送信成功を待たずして、ストアにメッセージ(送信中)が追加されていること', () => {
-    expect(store.getters['list'].size).toBe(0)
+    expect(store.getters['messages'].length).toBe(0)
 
-    const messageId = v4()
-    const message = {
+    store.dispatch('addSendingMessage', {
+      id: v4(),
       text: 'ADD_MESSAGE'
-    }
-    store.dispatch('addMessage', { messageId, message })
+    })
 
-    expect(store.getters['list'].size).toBe(1)
-    expect(store.getters['list'].get(messageId).text).toBe('ADD_MESSAGE')
+    expect(store.getters['messages'].length).toBe(1)
+    expect(store.getters['messages'][0].text).toBe('ADD_MESSAGE')
+    expect(store.getters['messages'][0].status).toBe('sending')
   })
 
   test('ストアに追加したメッセージが送信されていること', async () => {
-    const messageId = v4()
-    const message = {
-      text: 'SEND_MESSAGE'
-    }
+    expect(store.getters['messages'].length).toBe(0)
 
-    await store.dispatch('addAndSendMessage', { roomId: roomIdForSendTest, messageId, message })
+    await store.dispatch('addAndSendMessage', {
+      roomId: roomIdForSendTest,
+      message: {
+        id: v4(),
+        text: 'SEND_MESSAGE'
+      }
+    })
 
-    expect(store.getters['list'].get(messageId).status).toBe('sent')
+    expect(store.getters['messages'].length).toBe(1)
+    expect(store.getters['messages'][0].text).toBe('SEND_MESSAGE')
+    expect(store.getters['messages'][0].status).toBe('sent')
   })
 
   test('サーバへの送信が成功した時、メッセージのステータスが送信中から送信完了に変わること', async () => {
+    expect(store.getters['messages'].length).toBe(0)
+
     // 送信中のメッセージがすでにストアに存在している状態にする
-    const messageId = v4()
     const message = {
+      id: v4(),
       text: 'UPDATE_STATUS'
     }
-    store.dispatch('addMessage', { messageId, message })
+    store.dispatch('addSendingMessage', message)
 
-    expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
-    expect(store.getters['list'].get(messageId).status).toBe('sending')
+    expect(store.getters['messages'][0].text).toBe('UPDATE_STATUS')
+    expect(store.getters['messages'][0].status).toBe('sending')
 
-    await store.dispatch('sendMessage', { roomId: roomIdForSendTest, messageId, message })
+    await store.dispatch('sendMessage', { roomId: roomIdForSendTest, message })
 
-    expect(store.getters['list'].get(messageId).status).toBe('sent')
+    expect(store.getters['messages'][0].text).toBe('UPDATE_STATUS')
+    expect(store.getters['messages'][0].status).toBe('sent')
   })
 
   test('サーバへの送信が成功した時、メッセージに送信時刻がセットされていること', async () => {
+    expect(store.getters['messages'].length).toBe(0)
+
     // 送信中のメッセージがすでにストアに存在している状態にする
-    const messageId = v4()
     const message = {
+      id: v4(),
       text: 'UPDATE_STATUS'
     }
-    store.dispatch('addMessage', { messageId, message })
+    store.dispatch('addSendingMessage', message)
 
-    expect(store.getters['list'].get(messageId).text).toBe('UPDATE_STATUS')
-    expect(store.getters['list'].get(messageId).createdDate).toBeUndefined
+    expect(store.getters['messages'][0].text).toBe('UPDATE_STATUS')
+    expect(store.getters['messages'][0].createdDate).toBeUndefined
 
-    await store.dispatch('sendMessage', { roomId: roomIdForSendTest, messageId, message })
+    await store.dispatch('sendMessage', { roomId: roomIdForSendTest, message })
 
-    expect(store.getters['list'].get(messageId).createdDate).toBeTruthy()
+    expect(store.getters['messages'][0].createdDate).toBeTruthy()
   })
 
   test('ルームIDが与えられると、DBのメッセージ履歴がストアに展開されること', async () => {
-    expect(store.getters['list'].size).toBe(0)
+    expect(store.getters['messages'].length).toBe(0)
 
     const roomId = roomIdForFetchTest
     await store.dispatch('fetchAllMessages', roomId)
 
-    expect(store.getters['list'].size).toBe(5)
+    expect(store.getters['messages'].length).toBe(5)
   })
 
   test('リッスン開始後、裏からDBにメッセージを追加すると、ストアに反映されていること', async () => {
-    expect(store.getters['list'].size).toBe(0)
+    expect(store.getters['messages'].length).toBe(0)
 
     const roomId = roomIdForListenTest
     const messageId = v4()
-    const message = {
-      text: 'LISTEN_MESSAGE'
-    }
 
     store.dispatch('listenAllMessages', roomId)
+    await db.collection('rooms').doc(roomId).collection('messages').doc(messageId).set({
+      text: 'LISTEN_MESSAGE',
+      createdDate: firebase.firestore.FieldValue.serverTimestamp()
+    })
 
-    await db.collection('rooms').doc(roomIdForListenTest).collection('messages').doc(messageId).set(message)
-
-    expect(store.getters['list'].size).toBe(1)
-    expect(store.getters['list'].get(messageId).text).toBe('LISTEN_MESSAGE')
+    expect(store.getters['messages'].length).toBe(1)
+    expect(store.getters['messages'][0].text).toBe('LISTEN_MESSAGE')
   })
 
   afterAll(async () => {
