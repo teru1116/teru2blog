@@ -21,7 +21,8 @@ describe('store/article.js', () => {
     for (let index = 0; index < 25; index++) {
       const article = {
         title: `ARTICLE_${25 - index}`,
-        createdDate: new Date(new Date().getTime() - (25 - index) * 24 * 60 * 60 * 1000)
+        createdDate: new Date(new Date().getTime() - (25 - index) * 24 * 60 * 60 * 1000),
+        isTestData: true
       }
       const ref = db.collection('articles').doc()
       batch.set(ref, article)
@@ -48,7 +49,7 @@ describe('store/article.js', () => {
   afterAll(async () => {
     // clear DB
     const batch = db.batch()
-    const snapshot = await db.collection('articles').get()
+    const snapshot = await db.collection('articles').where('isTestData', '==', true).get()
     snapshot.forEach(doc => {
       batch.delete(doc.ref)
     })
