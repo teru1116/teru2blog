@@ -18,20 +18,20 @@ describe('store/admin/article.js', () => {
     // initialize DB
     // テスト用のルームを予め30件登録しておく
     const batch = db.batch()
-    for (let index = 30; index >= 0; index--) {
+    for (let index = 30; index > 0; index--) {
       const lastMessageText = `MESSAGE_${30 - index}`
       const createdDate = new Date(new Date().getTime() - index * 24 * 60 * 60 * 1000)
       const room = {
         lastMessageText: lastMessageText,
         createdDate: createdDate,
         updatedDate: createdDate,
-        isTestData: false
+        isTestData: true
       }
       const ref = db.collection('rooms').doc()
       batch.set(ref, room)
     }
 
-    batch.commit()
+    await batch.commit()
   })
 
   beforeEach(async () => {
