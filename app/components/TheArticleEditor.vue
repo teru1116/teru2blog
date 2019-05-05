@@ -13,7 +13,11 @@
         <div class="article-editor-metadata">
           <section>
             <h3>アイキャッチ画像</h3>
-            <div class="article-icatch-show" />
+            <ImagePicker
+              :width="180"
+              :height="135"
+              v-on:onSelect="setIcatchImage"
+            />
           </section>
           <section>
             <h3>記事カテゴリー</h3>
@@ -52,13 +56,16 @@
 
 <script>
 import MobileEditorMenu from './TheMobileArticleEditorMenubar'
+import ImagePicker from './ImagePicker'
 
 export default {
   components: {
-    MobileEditorMenu
+    MobileEditorMenu,
+    ImagePicker
   },
   data () {
     return {
+      icatchImageDataURL: '',
       inputCategoryName: '',
       selectedCategories: [],
       // mock
@@ -66,6 +73,9 @@ export default {
     }
   },
   methods: {
+    setIcatchImage (dataURL) {
+      this.icatchImageDataURL = dataURL
+    },
     selectCategory (category, index) {
       this.selectedCategories.push(category)
       this.allCategories.splice(index, 1)
