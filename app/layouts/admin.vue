@@ -12,7 +12,7 @@
                 <nuxt-link to="articles">記事</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="articles">チャット</nuxt-link>
+                <nuxt-link to="rooms">チャット</nuxt-link>
               </li>
               <li>
                 <button>ログアウト</button>
@@ -23,9 +23,7 @@
       </div>
     </header>
     <main>
-      <div class="inner">
-        <nuxt />
-      </div>
+      <nuxt />
     </main>
   </div>
 </template>
