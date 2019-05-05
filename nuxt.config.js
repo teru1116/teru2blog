@@ -36,6 +36,7 @@ export default {
   ** Global CSS
   */
   css: [
+    'reset-css',
     '@/assets/sass/common.scss'
   ],
 

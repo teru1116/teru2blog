@@ -11,13 +11,13 @@
         class="messages-view"
         :style="{ height: `${messageViewHeight}px` }"
       >
-        <ul>
+        <ol>
           <li v-for="(element, index) in message.messages" :key="index">
             <MessageItem
               :message="element"
             />
           </li>
-        </ul>
+        </ol>
       </div>
       <!-- チャット入力部 -->
       <div
@@ -96,8 +96,10 @@ export default {
 
 <style lang="scss" scoped>
 .chat-widget {
-  position: fixed;
+  position: absolute;
   bottom: 0;
+  right: 15px;
+  background-color: #fff;
   @media screen and (min-width: 600px) {
     width: 300px;
   }
@@ -111,14 +113,15 @@ export default {
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
     h2 {
-      font-size: 18px;
+      font-size: 16px;
+      margin: 0;
     }
   }
   .widget-body {
     .messages-view {
       padding: 0 8px;
       overflow: scroll;
-      ul {
+      ol {
         padding: 8px 0 0;
         li {
           margin-bottom: 8px;
