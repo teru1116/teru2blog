@@ -44,7 +44,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/firebase.js', ssr: false }
+    { src: '~/plugins/firebase.js', ssr: false },
+    { src: '~/plugins/isMobile.js', ssr: false }
   ],
 
   /*

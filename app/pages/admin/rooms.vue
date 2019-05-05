@@ -18,7 +18,6 @@
 <script>
 import { mapState } from 'vuex'
 import ListItem from './../../components/AdminRoomListItem'
-import { importDeclaration } from '@babel/types';
 
 export default {
   components: {

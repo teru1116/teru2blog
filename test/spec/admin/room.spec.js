@@ -7,7 +7,7 @@ import firebase from '@/app/plugins/firebase'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-describe('store/admin/article.js', () => {
+describe('store/admin/room', () => {
   let store
   let db
 
@@ -24,7 +24,7 @@ describe('store/admin/article.js', () => {
       const room = {
         lastMessageText: lastMessageText,
         createdDate: createdDate,
-        lastMessageDate: createdDate,
+        lastMessageText: createdDate,
         isTestData: true
       }
       const ref = db.collection('rooms').doc()
@@ -51,12 +51,12 @@ describe('store/admin/article.js', () => {
 
   afterAll(async () => {
     // clear DB
-    // const batch = db.batch()
-    // const snapshot = await db.collection('rooms').where('isTestData', '==', true).get()
-    // snapshot.forEach(doc => {
-    //   batch.delete(doc.ref)
-    // })
-    // await batch.commit()
+    const batch = db.batch()
+    const snapshot = await db.collection('rooms').where('isTestData', '==', true).get()
+    snapshot.forEach(doc => {
+      batch.delete(doc.ref)
+    })
+    await batch.commit()
 
     // clear Vuex Store
     store.dispatch('clearState')

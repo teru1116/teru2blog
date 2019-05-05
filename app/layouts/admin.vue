@@ -9,10 +9,10 @@
           <nav>
             <ul>
               <li>
-                <nuxt-link to="articles">記事</nuxt-link>
+                <nuxt-link to="/admin/articles">記事</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="rooms">チャット</nuxt-link>
+                <nuxt-link to="/admin/rooms">チャット</nuxt-link>
               </li>
               <li>
                 <button>ログアウト</button>

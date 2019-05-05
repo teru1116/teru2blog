@@ -45,7 +45,8 @@ export default {
 
     // 記事取得
     this.$store.dispatch('article/fetchRecentArticles')
-  }
+  },
+  layout: 'site'
 }
 </script>
 
