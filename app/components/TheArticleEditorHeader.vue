@@ -1,5 +1,5 @@
 <template>
-  <header class="admin">
+  <header class="page-header admin">
     <div class="inner">
       <div class="header-left-wrapper">
         <h1>
@@ -27,6 +27,14 @@
 
 <style lang="scss" scoped>
 header {
+  background-color: #fff;
+  z-index: 10;
+  @media screen and (max-width: 599px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
   .inner {
     .header-left-wrapper {}
     .header-right-wrapper {

@@ -3,68 +3,50 @@
     <editor-menu-bar :editor="editor">
       <div slot-scope="{ commands, getMarkAttrs }">
         <nav>
-          <div class="style-menu">
-            <ul>
-              <!-- 元に戻す -->
-              <li class="undo">
-                <button @click="commands.undo">
-                  <i class="material-icons">undo</i>
-                </button>
-              </li>
-              <!-- 見出し -->
-              <li>
-                <button @click="commands.heading({ level: 1 })">
-                  <i class="material-icons">title</i>
-                </button>
-              </li>
-              <!-- 太字 -->
-              <li>
-                <button @click="commands.bold">
-                  <i class="material-icons">format_bold</i>
-                </button>
-              </li>
-              <!-- リンク -->
-              <li>
-                <button @click="showLinkMenu(getMarkAttrs('link'))">
-                  <i class="material-icons">link</i>
-                </button>
-              </li>
-              <!-- 引用 -->
-              <li>
-                <button @click="commands.blockquote">
-                  <i class="material-icons">format_quote</i>
-                </button>
-              </li>
-              <!-- 写真 -->
-              <li>
-                <button @click="onPhotoButtonClick(commands.image)">
-                  <i class="material-icons">add_photo_alternate</i>
-                </button>
-              </li>
-              <!-- YouTube動画埋め込み -->
-              <li>
-                <button @click="showVideoMenu">
-                  <i class="material-icons">play_circle_filled</i>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <div class="artycle-config-menu">
-            <ul>
-              <!-- アイキャッチ画像 -->
-              <li>
-                <button @click="commands.bold">
-                  <i class="material-icons">photo</i>
-                </button>
-              </li>
-              <!-- カテゴリ -->
-              <li>
-                <button @click="commands.bold">
-                  <i class="material-icons">label</i>
-                </button>
-              </li>
-            </ul>
-          </div>
+          <ul>
+            <!-- 元に戻す -->
+            <li>
+              <button @click="commands.undo">
+                <i class="material-icons">undo</i>
+              </button>
+            </li>
+            <!-- 見出し -->
+            <li>
+              <button @click="commands.heading({ level: 1 })">
+                <i class="material-icons">title</i>
+              </button>
+            </li>
+            <!-- 太字 -->
+            <li>
+              <button @click="commands.bold">
+                <i class="material-icons">format_bold</i>
+              </button>
+            </li>
+            <!-- リンク -->
+            <li>
+              <button @click="showLinkMenu(getMarkAttrs('link'))">
+                <i class="material-icons">link</i>
+              </button>
+            </li>
+            <!-- 引用 -->
+            <li>
+              <button @click="commands.blockquote">
+                <i class="material-icons">format_quote</i>
+              </button>
+            </li>
+            <!-- 写真 -->
+            <li>
+              <button @click="onPhotoButtonClick(commands.image)">
+                <i class="material-icons">add_photo_alternate</i>
+              </button>
+            </li>
+            <!-- YouTube動画埋め込み -->
+            <li>
+              <button @click="showVideoMenu">
+                <i class="material-icons">play_circle_filled</i>
+              </button>
+            </li>
+          </ul>
         </nav>
         <!-- リンクURL入力欄 -->
         <form v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl)">
@@ -165,65 +147,27 @@ export default {
 <style lang="scss" scoped>
 nav {
   display: flex;
-  position: fixed;
-  left: 0px;
-  top: 48px;
-  width: 100vw;
   height: 44px;
-  border-bottom: 1px solid rgba(34,34,34,0.2);
-  background-color: #fff;
-  z-index: 8;
   ul {
     display: inline-flex;
     li {
       width: 44px;
       height: 44px;
-      &.undo {
-        position: relative;
-        &:before {
-          content: "";
-          display: block;
-          height: 75%;
-          width: 1px;
-          background-color: #222;
-          position: absolute;
-          right: 0;
-          top: 50%;
-          -webkit-transform: translate(0, -50%);
-          transform: translate(0, -50%);
-          opacity: 0.2;
-        }
-      }
-
       button {
         width: 100%;
         height: 100%;
       }
     }
   }
-  .style-menu {
-    width: calc(100% - 88px);
-    overflow-x: scroll;
-    overflow-y: hidden;
-  }
-  .artycle-config-menu {
-    width: 88px;
-    border-left: 1px solid rgba(34, 34, 34, 0.2);
-  }
 }
 
 form {
   display: flex;
-  position: fixed;
-  left: 0px;
-  top: 48px;
-  width: calc(100vw - 32px);
   padding: 0 16px;
   height: 44px;
-  border-bottom: 1px solid rgba(34, 34, 34, 0.2);
+  border: 1px solid rgba(34, 34, 34, 0.2);
+  border-radius: 4px;
   background-color: #fff;
-  z-index: 9;
-
   input {
     border: 0;
     font-size: 14px;
