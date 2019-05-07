@@ -4,7 +4,7 @@
       <nav>
         <div class="articles-nav-left"></div>
         <div class="articles-nav-right">
-          <nuxt-link to="articles/new" class="submit">
+          <nuxt-link to="new" class="submit">
             + 投稿
           </nuxt-link>
         </div>
