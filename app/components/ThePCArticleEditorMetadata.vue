@@ -5,7 +5,7 @@
       <ImagePicker
         :width="180"
         :height="135"
-        v-on:onSelect="setIcatchImage"
+        v-on:onSelect="onIcatchImageUpdate"
       />
     </section>
     <section>
@@ -23,15 +23,15 @@
           class="category"
         >
           <p>{{ categoryName }}</p>
-          <button class="remove" @click="deselectCategory(categoryName)">×</button>
+          <button class="remove" @click="$store.dispatch('admin/article/deselectCategory', categoryName)">×</button>
         </li>
       </ul>
       <h4>選択できるカテゴリー</h4>
-      <ul class="category-options">
+      <ul v-if="registeredCategories.length > 0" class="category-options">
         <li
           v-for="(categoryName, index) in registeredCategories"
           :key="index"
-          @click="selectCategory(categoryName, index)"
+          @click="$store.dispatch('admin/article/selectCategory', categoryName)"
         >
           {{ categoryName }}
         </li>
@@ -41,20 +41,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ImagePicker from './ImagePicker'
 
 export default {
   components: {
     ImagePicker
   },
+  computed: {
+    selectedCategories () { return this.$store.state.admin.article.displayingArticle.selectedCategories },
+    registeredCategories () { return this.$store.state.admin.article.displayingArticle.registeredCategories },
+    unregisteredCategories () { return this.$store.state.admin.article.displayingArticle.unregisteredCategories }
+  },
   data () {
     return {
-      icatchImageDataURL: '',
-      inputCategoryName: '',
-      selectedCategories: [],
-      unregisteredCategories: [],
-      // mock
-      registeredCategories: ['技術', 'アジャイル', 'スクラム', '開発委託', 'プロジェクト']
+      inputCategoryName: ''
     }
   },
   methods: {
@@ -65,33 +66,13 @@ export default {
       alreadySelected
         ? this.categoryError = 'すでに追加されています。'
         : alreadyRegistered
-          ? this.selectCategory(this.inputCategoryName)
-          : this.addCategory()
+          ? this.$store.dispatch('admin/article/selectCategory', this.inputCategoryName)
+          : this.$store.dispatch('admin/article/addCategory', this.inputCategoryName)
 
       this.inputCategoryName = ''
     },
-    addCategory () {
-      this.selectedCategories.push(this.inputCategoryName)
-      this.unregisteredCategories.push(this.inputCategoryName)
-    },
-    selectCategory (categoryName) {
-      const index = this.registeredCategories.indexOf(categoryName)
-      this.registeredCategories.splice(index, 1)
-      this.selectedCategories.push(categoryName)
-    },
-    deselectCategory (categoryName) {
-      const selectedIndex = this.selectedCategories.indexOf(categoryName)
-      this.selectedCategories.splice(selectedIndex, 1)
-
-      const unregisteredIndex = this.unregisteredCategories.indexOf(categoryName)
-      if (unregisteredIndex !== -1) {
-        this.unregisteredCategories.splice(unregisteredIndex, 1)
-      } else {
-        this.registeredCategories.push(categoryName)
-      }
-    },
-    setIcatchImage (dataURL) {
-      this.icatchImageDataURL = dataURL
+    onIcatchImageUpdate (dataURL) {
+      this.$store.dispatch('admin/article/updateIcatchImageDataURL', dataURL)
     }
   }
 }

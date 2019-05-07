@@ -3,7 +3,7 @@
     <MobileEditorMenu v-if="$isMobile" :editor="editor" />
     <div class="article-editor inner">
       <div class="article-editor-titlebody">
-        <input class="article-editor-title" placeholder="記事タイトル">
+        <input class="article-editor-title" placeholder="記事タイトル" @change="onTitleUpdate" >
         <PCEditorMenu v-if="!$isMobile" :editor="editor" class="pc-editor-menu" />
         <WysiwygEditor :editor="editor" />
       </div>
@@ -49,11 +49,18 @@ export default {
         ],
         content: ``,
         onUpdate: ({ getHTML }) => {
-          const content = getHTML()
-          this.$emit('onChange', content)
+          this.onContentUpdate(getHTML())
         },
-      }),
-      icatchImageDataURL: '',
+      })
+    }
+  },
+  methods: {
+    onTitleUpdate (e) {
+      const title = e.target.value
+      this.$store.dispatch('admin/article/updateTitle', title)
+    },
+    onContentUpdate (contentHTML) {
+      this.$store.dispatch('admin/article/updateContentHTML', contentHTML)
     }
   },
   beforeDestroy() {
