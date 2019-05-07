@@ -51,6 +51,12 @@ export default {
       footerHeight: 50
     }
   },
+  watch: {
+    '$route.params.roomId': function (roomId) {
+      this.$store.dispatch('admin/message/unlistenAllMessages', this.$route.params.roomId)
+      this.$store.dispatch('admin/message/listenAllMessages', roomId)
+    }
+  },
   methods: {
     onClickSendButton () {
       const roomId = this.$route.params.roomId
@@ -65,15 +71,23 @@ export default {
     onChangeTextareaHeight (newVal) {
       this.footerHeight = newVal + 18
     }
+  },
+  created () {
+    this.$store.dispatch('admin/message/listenAllMessages', this.$route.params.roomId)
+  },
+  destroyed () {
+    this.$store.dispatch('admin/message/unlistenAllMessages', this.$route.params.roomId)
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .chatroom {
-  width: calc(100vw - 300px);
   height: calc(100vh - 48px);
   position: relative;
+  @media screen and (min-width: 600px) {
+    width: calc(100vw - 300px);
+  }
   .messages-view {
     padding: 0 8px;
     overflow: scroll;

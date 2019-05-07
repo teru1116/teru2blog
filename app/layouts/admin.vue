@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header>
+    <header class="page-header">
       <div class="inner">
         <div class="header-left-wrapper">
           <h1>管理画面</h1>

@@ -1,17 +1,21 @@
 <template>
   <section>
-    <div class="room-list-wrapper">
-      <ul>
-        <ListItem
-          v-for="(room, index) in rooms"
-          :room="room"
-          :key="index"
-        />
-      </ul>
-    </div>
-    <div class="room-messages-wrapper">
-      <nuxt-child />
-    </div>
+    <template v-if="!$isMobile || $isMobile && !$route.params.roomId">
+      <div class="room-list-wrapper">
+        <ul>
+          <ListItem
+            v-for="(room, index) in rooms"
+            :room="room"
+            :key="index"
+          />
+        </ul>
+      </div>
+    </template>
+    <template v-if="!$isMobile || $isMobile && $route.params.roomId">
+      <div class="room-messages-wrapper">
+        <nuxt-child />
+      </div>
+    </template>
   </section>
 </template>
 
@@ -29,7 +33,10 @@ export default {
     })
   },
   created () {
-    this.$store.dispatch('admin/room/fetchAllRooms')
+    this.$store.dispatch('admin/room/listenAllRooms')
+  },
+  destroyed () {
+    this.$store.dispatch('admin/room/unlistenAllRooms')
   },
   layout: 'admin'
 }
@@ -37,19 +44,30 @@ export default {
 
 <style lang="scss" scoped>
 section {
-  display: flex;
+  @media screen and (min-width: 600px) {
+    display: flex;
+  }
   .room-list-wrapper {
-    width: 300px;
     border-right: 1px solid #eaecef;
+    @media screen and (min-width: 600px) {
+      width: 300px;
+    }
+    @media screen and (max-width: 599px) {
+      width: 100vw;
+    }
     ul {
       height: calc(100vh - 48px);
       overflow: scroll;
     }
   }
   .room-messages-wrapper {
-    flex: 1;
     height: calc(100vh - 48px);
+    @media screen and (min-width: 600px) {
+      flex: 1;
+    }
+    @media screen and (max-width: 599px) {
+      width: 100vw;
+    }
   }
 }
 </style>
-

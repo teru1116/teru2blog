@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header>
+    <header class="page-header">
       <div class="inner">
         <div class="header-left-wrapper">
           <h1>Noilan</h1>

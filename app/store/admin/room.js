@@ -19,6 +19,24 @@ const mutations = {
     state.rooms = payload
   },
 
+  addRoom (state, payload) {
+    state.rooms.push(payload)
+  },
+
+  updateRoom (state, payload) {
+    // ストアの中から、該当するルームを、最新から順に線形探索
+    for (let index = state.rooms.length - 1; index >= 0; index--) {
+      let currentRoom = state.rooms[index]
+      if (currentRoom.id === payload.id) {
+        const room = payload
+        // ルームを最新に持ってくる
+        state.rooms.splice(index, 1)
+        state.rooms.push(room)
+        break
+      }
+    }
+  },
+
   clearState (state) {
     state = Object.assign(state, defaultState())
   }
@@ -32,6 +50,27 @@ const actions = {
       results.push(Object.assign({ id: doc.id }, doc.data()))
     })
     commit('setRooms', results)
+  },
+
+  async listenAllRooms ({ commit }) {
+    db.collection('rooms').orderBy('lastMessageDate', 'desc')
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          const room = Object.assign({ id: change.doc.id }, change.doc.data())
+          room.lastMessageDate = change.doc.data().lastMessageDate.toDate()
+          if (change.type === 'added') {
+            commit('addRoom', room)
+          }
+          if (change.type === "modified") {
+            commit('updateRoom', room)
+          }
+        })
+      })
+  },
+
+  async unlistenAllRooms ({ commit }) {
+    const unsubscribe = db.collection('rooms').onSnapshot(() => {})
+    unsubscribe()
   },
 
   clearState ({ commit }) {
