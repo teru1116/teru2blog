@@ -12,11 +12,17 @@
             <li v-if="showsPreviewButton">
               <nuxt-link :to="`${$route.params.articleId || 0}/preview`">プレビュー</nuxt-link>
             </li>
-            <li v-if="showEditButton">
+            <li v-if="showsBackEditButton">
               <nuxt-link :to="editPagePath">編集に戻る</nuxt-link>
             </li>
             <li v-if="showsSaveButton">
               <button @click="onSaveButtonClick">下書き</button>
+            </li>
+            <li v-if="showsEditButton">
+              <nuxt-link :to="editPagePath">編集</nuxt-link>
+            </li>
+            <li v-if="showsDeleteButton">
+              <button @click="onDeleteButtonClick">削除</button>
             </li>
             <li>
               <button class="submit" @click="onPostButtonClick">投稿</button>
@@ -32,21 +38,30 @@
 export default {
   computed: {
     showsPreviewButton () {
-      return this.$route.name !== 'admin-articles-articleId-preview'
+      return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-edit'
     },
-    showEditButton () {
+    showsBackEditButton () {
       return this.$route.name === 'admin-articles-articleId-preview'
     },
-    editPagePath () {
-      return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`
+    showsEditButton () {
+      return this.$route.name === 'admin-articles-articleId'
+    },
+    showsDeleteButton () {
+      return this.$route.name === 'admin-articles-articleId'
     },
     showsSaveButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview'
+    },
+    editPagePath () {
+      return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`
     }
   },
   methods: {
     onSaveButtonClick () {
       this.$store.dispatch('admin/article/saveArticle', { isTestData: false })
+    },
+    onDeleteButtonClick () {
+      this.$store.dispatch('admin/article/deleteArticle')
     },
     onPostButtonClick () {
       this.$store.dispatch('admin/article/postArticle', { isTestData: false })
@@ -54,7 +69,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 header {

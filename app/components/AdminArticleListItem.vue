@@ -45,7 +45,7 @@ export default {
   methods: {
     async onSelect (articleId) {
       await this.$store.dispatch('admin/article/fetchArticle', articleId)
-      this.$router.push(`/admin/articles/${articleId}/preview`)
+      this.$router.push(`/admin/articles/${articleId}`)
     }
   }
 }

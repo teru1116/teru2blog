@@ -37,6 +37,8 @@ const mutations = {
 
   setDisplayingArticle (state, payload) {
     state.displayingArticle = payload
+    state.displayingArticle.selectedCategories = payload.categories
+    state.displayingArticle.createdDate = payload.createdDate.toDate()
   },
 
   refleshArticleId (state) {
@@ -95,7 +97,7 @@ const mutations = {
 const actions = {
   async fetchAllArticles ({ commit }) {
     let results = []
-    const snapshot = await db.collection('articles').where('isTestData', '==', true).limit(20).get()
+    const snapshot = await db.collection('articles').where('isTestData', '==', false).limit(20).get()
     snapshot.forEach(doc => {
       results.push(Object.assign({ id: doc.id }, doc.data()))
     })
@@ -184,6 +186,13 @@ const actions = {
       isPublished: false,
       isTestData
     })
+    commit('clearDisplayingArticle')
+    return
+  },
+
+  async deleteArticle ({ commit, state }) {
+    const articleId = state.displayingArticle.id
+    await db.collection('articles').doc(articleId).delete()
     commit('clearDisplayingArticle')
     return
   },
