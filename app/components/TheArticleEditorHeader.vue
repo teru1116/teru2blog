@@ -10,7 +10,7 @@
         <nav>
           <ul>
             <li v-if="showsPreviewButton">
-              <nuxt-link :to="`${$route.params.articleId || 0}/preview`">プレビュー</nuxt-link>
+              <nuxt-link :to="`/admin/articles/${$route.params.articleId || 0}/preview`">プレビュー</nuxt-link>
             </li>
             <li v-if="showsBackEditButton">
               <nuxt-link :to="editPagePath">編集に戻る</nuxt-link>
