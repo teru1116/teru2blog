@@ -181,7 +181,7 @@ const actions = {
       contentHTML: article.contentHTML,      
       icatchImageDataURL: article.icatchImageDataURL,
       categories: article.selectedCategories,
-      unregisteredCategories: article.unregisteredCategories,
+      unregisteredCategories: article.unregisteredCategories || null,
       createdDate: article.createdDate,
       isPublished: false,
       isTestData
