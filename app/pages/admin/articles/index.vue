@@ -59,6 +59,14 @@ section {
       }
     }
   }
+  ul {
+    @media screen and (min-width: 600px) {
+      margin-top: 16px;
+    }
+    @media screen and (max-width: 599px) {
+      margin-top: 8px;
+    }
+  }
 }
 </style>
 
