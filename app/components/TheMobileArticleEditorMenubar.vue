@@ -53,13 +53,13 @@
             <ul>
               <!-- アイキャッチ画像 -->
               <li>
-                <button @click="commands.bold">
+                <button @click="showsIcatchImageModal = !showsIcatchImageModal">
                   <i class="material-icons">photo</i>
                 </button>
               </li>
               <!-- カテゴリ -->
               <li>
-                <button @click="commands.bold">
+                <button @click="showsCategoryModal = !showsCategoryModal">
                   <i class="material-icons">label</i>
                 </button>
               </li>
@@ -89,15 +89,34 @@
       :style="{ display: 'none' }"
       @change="onFileSelect"
     />
+    <!-- アイキャッチ画像設定モーダル -->
+    <Modal v-if="showsIcatchImageModal" v-on:onClose="showsIcatchImageModal = false" >
+      <h3>アイキャッチ画像</h3>
+      <ImagePicker
+        :width="180"
+        :height="135"
+        v-on:onSelect="onIcatchImageUpdate"
+      />
+    </Modal>
+    <!-- カテゴリー設定モーダル -->
+    <Modal v-if="showsCategoryModal" v-on:onClose="showsCategoryModal = false" >
+      <CategoryEditor />
+    </Modal>
   </div>
 </template>
 
 <script>
 import { EditorMenuBar } from 'tiptap'
+import Modal from './Modal'
+import ImagePicker from './ImagePicker'
+import CategoryEditor from './TheArticleEditorCategory'
 
 export default {
   components: {
-    EditorMenuBar
+    EditorMenuBar,
+    Modal,
+    ImagePicker,
+    CategoryEditor
   },
   props: {
     editor: Object
@@ -108,6 +127,8 @@ export default {
       linkMenuIsActive: false,
       videoId: null,
       videoMenuIsActive: false,
+      showsIcatchImageModal: false,
+      showsCategoryModal: false,
       command: null
     }
   },
