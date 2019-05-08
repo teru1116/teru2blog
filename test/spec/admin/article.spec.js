@@ -11,11 +11,12 @@ localVue.use(Vuex)
 describe('store/admin/article', () => {
   let store
   let db
+  let testArticleCount
 
   beforeAll(async () => {
     store = new Vuex.Store(cloneDeep(article))
     db = firebase.firestore()
-    const testArticleCount = 25
+    testArticleCount = 25
 
     // initialize DB
     // テスト用の記事を予め登録しておく
@@ -49,39 +50,35 @@ describe('store/admin/article', () => {
   })
 
   test('記事を投稿すると、DBに登録されていること', async () => {
-    const beforeSnapshot = await db.collection('articles').where('isTestData', '==', true).get()
-    expect(beforeSnapshot.size).toBe(testArticleCount)
-
     const articleId = v4()
-    store.dispatch('updateTitle', 'TITLE')
-    store.dispatch('updateContentHTML', '<p>CONTENT</p>')
-    store.dispatch('selectCategory', 'CATEGORY')
-    await store.dispatch('postArticle', articleId)
+    const isTestData = true
+    store.dispatch('updateTitle', 'TITLE_1')
+    store.dispatch('updateContentHTML', '<p>CONTENT_1</p>')
+    store.dispatch('selectCategory', 'CATEGORY_1')
+    await store.dispatch('postArticle', { articleId, isTestData })
 
     const doc = await db.collection('articles').doc(articleId).get()
     const article = doc.data()
     expect(article.isPublished).toBeTruthy()
-    expect(article.title).toBe('TITLE')
-    expect(article.contentHTML).toBe('<p>CONTENT</p>')
-    expect(article.categories).toContain('CATEGORY')
+    expect(article.title).toBe('TITLE_1')
+    expect(article.contentHTML).toBe('<p>CONTENT_1</p>')
+    expect(article.categories).toContain('CATEGORY_1')
   })
 
-  test('記事を下書き保存すると、DBに下書きで登録されていること', () => {
-    const snapshot = await db.collection('articles').where('isTestData', '==', true).get()
-    expect(snapshot.size).toBe(testArticleCount)
-
+  test('記事を下書き保存すると、DBに下書きで登録されていること', async () => {
     const articleId = v4()
-    store.dispatch('updateTitle', 'TITLE')
-    store.dispatch('updateContentHTML', '<p>CONTENT</p>')
-    store.dispatch('selectCategory', 'CATEGORY')
-    await store.dispatch('saveArticle', articleId)
+    const isTestData = true
+    store.dispatch('updateTitle', 'TITLE_2')
+    store.dispatch('updateContentHTML', '<p>CONTENT_2</p>')
+    store.dispatch('selectCategory', 'CATEGORY_2')
+    await store.dispatch('saveArticle', { articleId, isTestData })
 
     const doc = await db.collection('articles').doc(articleId).get()
     const article = doc.data()
     expect(article.isPublished).toBeFalsy()
-    expect(article.title).toBe('TITLE')
-    expect(article.contentHTML).toBe('<p>CONTENT</p>')
-    expect(article.categories).toContain('CATEGORY')
+    expect(article.title).toBe('TITLE_2')
+    expect(article.contentHTML).toBe('<p>CONTENT_2</p>')
+    expect(article.categories).toContain('CATEGORY_2')
   })
 
   afterAll(async () => {
