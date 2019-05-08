@@ -14,7 +14,6 @@
 export default {
   methods: {
     close () {
-      document.body.removeChild(this.$el)
       this.$emit('onClose')
     }
   },
@@ -23,7 +22,9 @@ export default {
     document.body.appendChild(this.$el)
   },
   beforeDestroy () {
-    this.close()
+    if (document.body.contains(this.$el)) {
+      document.body.removeChild(this.$el)
+    }
   }
 }
 </script>
