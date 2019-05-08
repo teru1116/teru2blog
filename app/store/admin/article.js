@@ -154,7 +154,7 @@ const actions = {
     commit('updateUnregisteredCategories', unregisteredCategories)
   },
 
-  async postArticle ({ commit, state }, { isTestData }) {
+  async postArticle ({ dispatch, commit, state }, { isTestData }) {
     const article = state.displayingArticle
     const batch = db.batch()
     batch.set(db.collection('articles').doc(article.id), {
@@ -166,15 +166,18 @@ const actions = {
       isPublished: true,
       isTestData
     })
-    state.displayingArticle.unregisteredCategories.forEach(categoryName => {
-      batch.set(db.collection('articleCategories').doc(categoryName))
-    })
+    if (state.displayingArticle.unregisteredCategories) {
+      state.displayingArticle.unregisteredCategories.forEach(categoryName => {
+        batch.set(db.collection('articleCategories').doc(categoryName))
+      })
+    }
     await batch.commit()
     commit('clearDisplayingArticle')
+    await dispatch('fetchAllArticles')
     return
   },
 
-  async saveArticle ({ commit, state }, { isTestData }) {
+  async saveArticle ({ dispatch, commit, state }, { isTestData }) {
     const article = state.displayingArticle
     await db.collection('articles').doc(article.id).set({
       title: article.title,
@@ -187,13 +190,15 @@ const actions = {
       isTestData
     })
     commit('clearDisplayingArticle')
+    await dispatch('fetchAllArticles')
     return
   },
 
-  async deleteArticle ({ commit, state }) {
+  async deleteArticle ({ dispatch, commit, state }) {
     const articleId = state.displayingArticle.id
     await db.collection('articles').doc(articleId).delete()
     commit('clearDisplayingArticle')
+    await dispatch('fetchAllArticles')
     return
   },
 
