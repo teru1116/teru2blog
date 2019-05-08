@@ -1,4 +1,5 @@
 import firebase from './../../plugins/firebase'
+import v4 from 'uuid/v4'
 
 const db = firebase.firestore()
 
@@ -8,6 +9,7 @@ const defaultState = () => {
     articles: [],
     // 編集やプレビューしている記事のデータ
     displayingArticle: {
+      id: '',
       title: '',
       contentHTML: '',
       icatchImageDataURL: '',
@@ -35,6 +37,10 @@ const mutations = {
 
   setDisplayingArticle (state, payload) {
     state.displayingArticle = payload
+  },
+
+  refleshArticleId (state) {
+    state.displayingArticle.id = v4()
   },
 
   updateTitle (state, payload) {
@@ -103,6 +109,10 @@ const actions = {
     return
   },
 
+  refleshArticleId ({ commit }) {
+    commit('refleshArticleId')
+  },
+
   updateTitle ({ commit }, title) {
     commit('updateTitle', title)
   },
@@ -142,10 +152,10 @@ const actions = {
     commit('updateUnregisteredCategories', unregisteredCategories)
   },
 
-  async postArticle ({ commit, state }, { articleId, isTestData }) {
+  async postArticle ({ commit, state }, { isTestData }) {
     const article = state.displayingArticle
     const batch = db.batch()
-    batch.set(db.collection('articles').doc(articleId), {
+    batch.set(db.collection('articles').doc(article.id), {
       title: article.title,
       contentHTML: article.contentHTML,      
       icatchImageDataURL: article.icatchImageDataURL,
@@ -162,9 +172,9 @@ const actions = {
     return
   },
 
-  async saveArticle ({ commit, state }, { articleId, isTestData }) {
+  async saveArticle ({ commit, state }, { isTestData }) {
     const article = state.displayingArticle
-    await db.collection('articles').doc(articleId).set({
+    await db.collection('articles').doc(article.id).set({
       title: article.title,
       contentHTML: article.contentHTML,      
       icatchImageDataURL: article.icatchImageDataURL,

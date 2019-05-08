@@ -16,10 +16,10 @@
               <nuxt-link :to="editPagePath">編集に戻る</nuxt-link>
             </li>
             <li v-if="showsSaveButton">
-              <button>下書き</button>
+              <button @click="onSaveButtonClick">下書き</button>
             </li>
             <li>
-              <button class="submit">投稿</button>
+              <button class="submit" @click="onPostButtonClick">投稿</button>
             </li>
           </ul>
         </nav>
@@ -42,6 +42,14 @@ export default {
     },
     showsSaveButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview'
+    }
+  },
+  methods: {
+    onSaveButtonClick () {
+      this.$store.dispatch('admin/article/saveArticle', { isTestData: false })
+    },
+    onPostButtonClick () {
+      this.$store.dispatch('admin/article/postArticle', { isTestData: false })
     }
   }
 }

@@ -4,9 +4,9 @@
       <nav>
         <div class="articles-nav-left"></div>
         <div class="articles-nav-right">
-          <nuxt-link to="new" class="submit">
+          <button class="submit" @click="onCreateButtonClick">
             + 投稿
-          </nuxt-link>
+          </button>
         </div>
       </nav>
       <ul>
@@ -35,6 +35,12 @@ export default {
   },
   created () {
     this.$store.dispatch('admin/article/fetchAllArticles')
+  },
+  methods: {
+    onCreateButtonClick () {
+      this.$store.dispatch('admin/article/refleshArticleId')
+      this.$router.push('/admin/articles/new')
+    }
   },
   layout: 'admin'
 }
