@@ -12,6 +12,9 @@
             <li v-if="showsPreviewButton">
               <nuxt-link :to="`${$route.params.articleId || 0}/preview`">プレビュー</nuxt-link>
             </li>
+            <li v-if="showEditButton">
+              <nuxt-link :to="editPagePath">編集に戻る</nuxt-link>
+            </li>
             <li v-if="showsSaveButton">
               <button>下書き</button>
             </li>
@@ -30,6 +33,12 @@ export default {
   computed: {
     showsPreviewButton () {
       return this.$route.name !== 'admin-articles-articleId-preview'
+    },
+    showEditButton () {
+      return this.$route.name === 'admin-articles-articleId-preview'
+    },
+    editPagePath () {
+      return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`
     },
     showsSaveButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview'
