@@ -22,13 +22,12 @@ describe('store/article.js', () => {
       const article = {
         title: `ARTICLE_${25 - index}`,
         createdDate: new Date(new Date().getTime() - (25 - index) * 24 * 60 * 60 * 1000),
-        isTestData: false
+        isTestData: true
       }
       const ref = db.collection('articles').doc()
       batch.set(ref, article)
     }
-
-    batch.commit()
+    await batch.commit()
   })
 
   beforeEach(async () => {
