@@ -17,9 +17,7 @@ const getters = {
 
 const mutations = {
   pushRecentArticles (state, payload) {
-    payload.forEach(article => {
-      state.recentArticles.push(article)
-    })
+    state.recentArticles = payload
   },
 
   clearState (state) {

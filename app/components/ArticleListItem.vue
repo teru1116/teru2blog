@@ -1,6 +1,6 @@
 <template>
   <li>
-    <a>
+    <nuxt-link :to="`/articles/${article.id}`">
       <div class="article-list-item-left">
         <!-- アイキャッチ画像 -->
         <div class="article-image-icatch" :style="{ backgroundImage: `url(${article.icatchImageDataURL})` }" />
@@ -20,7 +20,7 @@
           <time>{{ dateString }}</time>
         </div>
       </div>
-    </a>
+    </nuxt-link>
     <hr />
   </li>
 </template>
