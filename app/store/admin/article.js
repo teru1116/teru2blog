@@ -15,7 +15,8 @@ const defaultState = () => {
       // mock
       registeredCategories: ['技術', 'アジャイル', 'スクラム', '開発委託', 'プロジェクト'],
       // 新たにDBに登録する必要のあるカテゴリ
-      unregisteredCategories: []
+      unregisteredCategories: [],
+      createdDate: new Date()
     }
   }
 }
@@ -33,7 +34,7 @@ const mutations = {
   },
 
   setDisplayingArticle (state, payload) {
-    state.displayingArticle.title = payload
+    state.displayingArticle = payload
   },
 
   updateTitle (state, payload) {

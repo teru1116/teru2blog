@@ -1,52 +1,73 @@
 <template>
-  <section>
+  <section class="inner">
     <header class="article-header">
       <div class="article-metadata">
         <ul class="category-list">
-          <li v-for="(categoryId, index) in categories" :key="index">
+          <li v-for="(categoryId, index) in article.selectedCategories" :key="index">
             <nuxt-link :to="`categories/${categoryId}`">{{ categoryId }}</nuxt-link>
           </li>
         </ul>
         <time>{{ createdDateString }}</time>
       </div>
-      <h2>{{ title }}</h2>
+      <h2>{{ article.title }}<hr /></h2>
     </header>
-    <section class="wysiwyg" v-html="contentHTML" />
+    <section class="wysiwyg" v-html="article.contentHTML" />
   </section>
 </template>
 
 <script>
 export default {
   computed: {
+    article () {
+      return this.$store.state.admin.article.displayingArticle
+    },
     createdDateString () {
-      const createdDate = this.createdDate.toDate()
-      return `${this.createdDate.getMonth() + 1}/${this.createdDate.getDate()}`
-    }
-  },
-  data () {
-    return {
-      title: '',
-      contentHTML: '',
-      categories: [],
-      createdDate: new Date()
-    }
-  },
-  methods: {
-    async fetchArticle () {
-      const db = this.$firebase.firestore()
-      const doc = await db.collection('articles').doc(this.$route.params.articleId).get()
-      Object.assign(this.$data, doc.data())
+      return `${this.article.createdDate.getFullYear()}.${this.article.createdDate.getMonth() + 1}.${this.article.createdDate.getDate()}`
     }
   },
   created () {
-    // 親コンポーネントが記事ページの場合は、DBからロードする
     if (this.$route.name === 'articles-articleId') {
-      this.fetchArticle()
-    // 親コンポーネントがプレビューページの場合は、ストアから読み込む
-    } else if (this.$route.name === 'admin-articles-articleId-preview') {
-      const editingArticle = this.$store.getters['admin/article/article']
-      Object.assign(this.$data, editingArticle)
+      this.$store.dispatch('admin/article/fetchArticle', this.$route.params.articleId)
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.article-header {
+  margin: 60px 0 35px;
+  .article-metadata {
+    display: flex;
+    ul {
+      display: flex;
+      li {
+        margin-right: 4px;
+        a {
+          color: #0052A3;
+          font-size: 15px;
+        }
+        &:after {
+          content: ",";
+        }
+        &:last-child {
+          &:after {
+            content: "  |  ";
+          }
+        }
+      }
+    }
+  }
+  h2 {
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 45.46px;
+    letter-spacing: 2.1px;
+    hr {
+      background-color: #0070c9;
+      background: linear-gradient(#42a1ec, #0070c9);
+      height: 2px;
+      border: 0;
+    }
+  }
+}
+</style>

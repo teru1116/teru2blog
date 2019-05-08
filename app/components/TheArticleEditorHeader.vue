@@ -9,10 +9,10 @@
       <div class="header-right-wrapper">
         <nav>
           <ul>
-            <li>
-              <nuxt-link to="preview">プレビュー</nuxt-link>
+            <li v-if="showsPreviewButton">
+              <nuxt-link :to="`${$route.params.articleId || 0}/preview`">プレビュー</nuxt-link>
             </li>
-            <li v-if="$route.name === 'admin-articles-new'">
+            <li v-if="showsSaveButton">
               <button>下書き</button>
             </li>
             <li>
@@ -24,6 +24,20 @@
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  computed: {
+    showsPreviewButton () {
+      return this.$route.name !== 'admin-articles-articleId-preview'
+    },
+    showsSaveButton () {
+      return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview'
+    }
+  }
+}
+</script>
+
 
 <style lang="scss" scoped>
 header {
