@@ -3,7 +3,6 @@ import article from './../../../app/store/admin/article'
 import { createLocalVue } from '@vue/test-utils'
 import cloneDeep from 'clone-deep'
 import firebase from './../../../app/plugins/firebase'
-import v4 from 'uuid/v4'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -50,12 +49,12 @@ describe('store/admin/article', () => {
   })
 
   test('記事を投稿すると、DBに登録されていること', async () => {
-    const articleId = v4()
-    const isTestData = true
+    store.dispatch('refleshArticleId')
+    const articleId = store.getters['article'].id
     store.dispatch('updateTitle', 'TITLE_1')
     store.dispatch('updateContentHTML', '<p>CONTENT_1</p>')
     store.dispatch('selectCategory', 'CATEGORY_1')
-    await store.dispatch('postArticle', { articleId, isTestData })
+    await store.dispatch('postArticle', { isTestData: true })
 
     const doc = await db.collection('articles').doc(articleId).get()
     const article = doc.data()
@@ -66,12 +65,12 @@ describe('store/admin/article', () => {
   })
 
   test('記事を下書き保存すると、DBに下書きで登録されていること', async () => {
-    const articleId = v4()
-    const isTestData = true
+    store.dispatch('refleshArticleId')
+    const articleId = store.getters['article'].id
     store.dispatch('updateTitle', 'TITLE_2')
     store.dispatch('updateContentHTML', '<p>CONTENT_2</p>')
     store.dispatch('selectCategory', 'CATEGORY_2')
-    await store.dispatch('saveArticle', { articleId, isTestData })
+    await store.dispatch('saveArticle', { isTestData: true })
 
     const doc = await db.collection('articles').doc(articleId).get()
     const article = doc.data()
