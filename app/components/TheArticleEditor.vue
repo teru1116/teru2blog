@@ -5,7 +5,7 @@
       <div class="article-editor-titlebody">
         <input class="article-editor-title" placeholder="記事タイトル" :value="title" @change="onTitleUpdate" >
         <PCEditorMenu v-if="!$isMobile" :editor="editor" class="pc-editor-menu" />
-        <WysiwygEditor :editor="editor" />
+        <WysiwygEditor :editor="editor" :style="$isMobile ? null : { position: 'sticky', top: '72px' }" />
       </div>
       <PCEditorMetadata v-if="!$isMobile" />
     </div>
