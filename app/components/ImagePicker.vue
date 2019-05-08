@@ -2,7 +2,7 @@
   <div>
     <div
       class="image-picker"
-      :style="{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${this.dataURL})` }"
+      :style="{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${backgroundImageUrl})` }"
       @click="$refs.input.click()"
     />
     <input
@@ -18,11 +18,17 @@
 export default {
   props: {
     width: Number,
-    height: Number
+    height: Number,
+    dataURL: String
+  },
+  computed: {
+    backgroundImageUrl () {
+      return this.selectedImageDataURL || this.dataURL
+    }
   },
   data () {
     return {
-      dataURL: '',
+      selectedImageDataURL: '',
       file: null
     }
   },
@@ -34,8 +40,8 @@ export default {
       const image = new Image()
       const reader = new FileReader()
       reader.onload = () => {
-        this.dataURL = reader.result
-        this.$emit('onSelect', reader.result, file.name)
+        this.selectedImageDataURL = reader.result
+        this.$emit('onSelect', reader.result)
       }
       reader.readAsDataURL(file)
     }

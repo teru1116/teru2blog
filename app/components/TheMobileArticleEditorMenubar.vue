@@ -95,6 +95,7 @@
       <ImagePicker
         :width="180"
         :height="135"
+        :dataURL="icatchImageDataURL"
         v-on:onSelect="onIcatchImageUpdate"
       />
     </Modal>
@@ -120,6 +121,9 @@ export default {
   },
   props: {
     editor: Object
+  },
+  computed: {
+    icatchImageDataURL () { return this.$store.state.admin.article.displayingArticle.icatchImageDataURL }
   },
   data () {
     return {
@@ -178,6 +182,9 @@ export default {
         this.command = null
       }
       reader.readAsDataURL(file)
+    },
+    onIcatchImageUpdate (dataURL) {
+      this.$store.dispatch('admin/article/updateIcatchImageDataURL', dataURL)
     }
   }
 }
