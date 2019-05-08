@@ -3,7 +3,7 @@
     <MobileEditorMenu v-if="$isMobile" :editor="editor" />
     <div class="article-editor inner">
       <div class="article-editor-titlebody">
-        <input class="article-editor-title" placeholder="記事タイトル" @change="onTitleUpdate" >
+        <input class="article-editor-title" placeholder="記事タイトル" :value="title" @change="onTitleUpdate" >
         <PCEditorMenu v-if="!$isMobile" :editor="editor" class="pc-editor-menu" />
         <WysiwygEditor :editor="editor" />
       </div>
@@ -47,11 +47,12 @@ export default {
           new History(),
           new Iframe()
         ],
-        content: ``,
+        content: this.$store.state.admin.article.displayingArticle.contentHTML,
         onUpdate: ({ getHTML }) => {
           this.onContentUpdate(getHTML())
         },
-      })
+      }),
+      title: this.$store.state.admin.article.displayingArticle.title
     }
   },
   methods: {
