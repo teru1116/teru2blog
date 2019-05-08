@@ -142,8 +142,44 @@ const actions = {
     commit('updateUnregisteredCategories', unregisteredCategories)
   },
 
+  async postArticle ({ commit, state }, { articleId, isTestData }) {
+    const article = state.displayingArticle
+    const batch = db.batch()
+    batch.set(db.collection('articles').doc(articleId), {
+      title: article.title,
+      contentHTML: article.contentHTML,      
+      icatchImageDataURL: article.icatchImageDataURL,
+      categories: article.selectedCategories,
+      createdDate: article.createdDate,
+      isPublished: true,
+      isTestData
+    })
+    state.displayingArticle.unregisteredCategories.forEach(categoryName => {
+      batch.set(db.collection('articleCategories').doc(categoryName))
+    })
+    await batch.commit()
+    commit('clearDisplayingArticle')
+    return
+  },
+
+  async saveArticle ({ commit, state }, { articleId, isTestData }) {
+    const article = state.displayingArticle
+    await db.collection('articles').doc(articleId).set({
+      title: article.title,
+      contentHTML: article.contentHTML,      
+      icatchImageDataURL: article.icatchImageDataURL,
+      categories: article.selectedCategories,
+      unregisteredCategories: article.unregisteredCategories,
+      createdDate: article.createdDate,
+      isPublished: false,
+      isTestData
+    })
+    commit('clearDisplayingArticle')
+    return
+  },
+
   onExitArticle ({ commit }) {
-    commit('cleardisplayingArticle')
+    commit('clearDisplayingArticle')
   },
 
   clearState ({ commit }) {
