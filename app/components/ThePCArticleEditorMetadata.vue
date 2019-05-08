@@ -5,6 +5,7 @@
       <ImagePicker
         :width="180"
         :height="135"
+        :defaultImageDataURL="defaultImageDataURL"
         v-on:onSelect="onIcatchImageUpdate"
       />
     </section>
@@ -20,6 +21,11 @@ export default {
   components: {
     ImagePicker,
     CategoryEditor
+  },
+  data () {
+    return {
+      defaultImageDataURL: this.$store.state.admin.article.displayingArticle.icatchImageDataURL
+    }
   },
   methods: {
     onIcatchImageUpdate (dataURL) {

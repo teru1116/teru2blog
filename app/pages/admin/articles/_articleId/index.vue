@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import EditorHeader from './../../../components/TheArticleEditorHeader'
-import ArticleContent from './../../../components/TheArticleContent'
+import EditorHeader from './../../../../components/TheArticleEditorHeader'
+import ArticleContent from './../../../../components/TheArticleContent'
 
 export default {
   components: {

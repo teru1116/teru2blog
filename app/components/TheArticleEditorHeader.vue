@@ -50,7 +50,7 @@ export default {
       return this.$route.name === 'admin-articles-articleId'
     },
     showsSaveButton () {
-      return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview'
+      return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview' || this.$route.name === 'admin-articles-articleId-edit'
     },
     editPagePath () {
       return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`

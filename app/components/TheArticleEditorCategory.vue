@@ -34,7 +34,7 @@
 export default {
   computed: {
     selectedCategories () { return this.$store.state.admin.article.displayingArticle.selectedCategories },
-    registeredCategories () { return this.$store.state.admin.article.displayingArticle.registeredCategories },
+    registeredCategories () { return this.$store.state.admin.article.registeredCategories },
     unregisteredCategories () { return this.$store.state.admin.article.displayingArticle.unregisteredCategories }
   },
   data () {

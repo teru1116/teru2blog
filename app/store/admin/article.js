@@ -14,12 +14,12 @@ const defaultState = () => {
       contentHTML: '',
       icatchImageDataURL: '',
       selectedCategories: [],
-      // mock
-      registeredCategories: ['技術', 'アジャイル', 'スクラム', '開発委託', 'プロジェクト'],
       // 新たにDBに登録する必要のあるカテゴリ
       unregisteredCategories: [],
       createdDate: new Date()
-    }
+    },
+    // mock
+    registeredCategories: ['技術', 'アジャイル', 'スクラム', '開発委託', 'プロジェクト'],
   }
 }
 
@@ -62,7 +62,7 @@ const mutations = {
   },
 
   addRegisteredCategories (state, payload) {
-    state.displayingArticle.registeredCategories.push(payload)
+    state.registeredCategories.push(payload)
   },
 
   addUnregisteredCategories (state, payload) {
@@ -74,7 +74,7 @@ const mutations = {
   },
 
   removeRegisteredCategories (state, payload) {
-    state.displayingArticle.registeredCategories.splice(payload, 1)
+    state.registeredCategories.splice(payload, 1)
   },
 
   removeUnregisteredCategories (state, payload) {
@@ -133,7 +133,7 @@ const actions = {
   },
 
   selectCategory ({ commit, state }, categoryName) {
-    const index = state.displayingArticle.registeredCategories.indexOf(categoryName)
+    const index = state.registeredCategories.indexOf(categoryName)
     commit('removeRegisteredCategories', index)
     commit('addSelectedCategory', categoryName)
   },

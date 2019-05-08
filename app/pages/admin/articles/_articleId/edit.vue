@@ -2,26 +2,22 @@
   <div>
     <EditorHeader />
     <main>
-      <!-- 記事エディタ -->
+      <Editor />
     </main>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import EditorHeader from './../../../../components/TheArticleEditorHeader'
+import Editor from './../../../../components/TheArticleEditor'
 
 export default {
   components: {
-    EditorHeader
+    EditorHeader,
+    Editor
   },
-  computed: {
-    ...mapState({
-      article: state => state.admin.article.selectedArticle
-    })
+  created () {
+    this.$store.dispatch('admin/article/fetchArticle', this.$route.params.articleId)
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

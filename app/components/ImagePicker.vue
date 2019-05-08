@@ -19,11 +19,11 @@ export default {
   props: {
     width: Number,
     height: Number,
-    dataURL: String
+    defaultImageDataURL: String
   },
   computed: {
     backgroundImageUrl () {
-      return this.selectedImageDataURL || this.dataURL
+      return this.selectedImageDataURL || this.defaultImageDataURL
     }
   },
   data () {

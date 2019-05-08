@@ -95,7 +95,7 @@
       <ImagePicker
         :width="180"
         :height="135"
-        :dataURL="icatchImageDataURL"
+        :defaultImageDataURL="defaultImageDataURL"
         v-on:onSelect="onIcatchImageUpdate"
       />
     </Modal>
@@ -122,9 +122,6 @@ export default {
   props: {
     editor: Object
   },
-  computed: {
-    icatchImageDataURL () { return this.$store.state.admin.article.displayingArticle.icatchImageDataURL }
-  },
   data () {
     return {
       linkUrl: null,
@@ -133,7 +130,8 @@ export default {
       videoMenuIsActive: false,
       showsIcatchImageModal: false,
       showsCategoryModal: false,
-      command: null
+      command: null,
+      defaultImageDataURL: this.$store.state.admin.article.displayingArticle.icatchImageDataURL
     }
   },
   methods: {
