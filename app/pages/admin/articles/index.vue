@@ -35,6 +35,7 @@ export default {
   },
   created () {
     this.$store.dispatch('admin/article/fetchAllArticles')
+    this.$store.dispatch('admin/article/onExitArticle')
   },
   methods: {
     onCreateButtonClick () {
