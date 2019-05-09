@@ -1,8 +1,10 @@
 <template>
-  <div class="chat-widget">
+  <div class="chat-widget" :class="{ isExpanded }">
     <!-- チャットウィジェット ヘッダー -->
     <div class="widget-header">
-      <button class="toggle-widget"/>
+      <button class="toggle-widget" @click="isExpanded = !isExpanded">
+        <i class="material-icons">{{ isExpanded ? 'expand_more' : 'expand_less' }}</i>
+      </button>
       <h2>チャットでお問い合わせ</h2>
     </div>
     <div class="widget-body">
@@ -64,7 +66,8 @@ export default {
   data () {
     return {
       inputMessageText: '',
-      footerHeight: 50
+      footerHeight: 50,
+      isExpanded: false
     }
   },
   watch: {
@@ -97,8 +100,11 @@ export default {
 <style lang="scss" scoped>
 .chat-widget {
   position: absolute;
-  bottom: 0;
+  bottom: -367px;
   background-color: #fff;
+  &.isExpanded {
+    bottom: 0;
+  }
   @media screen and (min-width: 600px) {
     right: 15px;
     width: 300px;
@@ -115,8 +121,17 @@ export default {
     padding: 12px 8px;
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
+    .toggle-widget {
+      height: 16px;
+      margin-right: 4px;
+      i {
+        font-size: 16px;
+        color: #fff;
+      }
+    }
     h2 {
       font-size: 16px;
+      line-height: 16px;
       margin: 0;
     }
   }
