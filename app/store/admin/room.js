@@ -53,6 +53,7 @@ const actions = {
   },
 
   async listenAllRooms ({ commit }) {
+    commit('clearState')
     db.collection('rooms').orderBy('lastMessageDate', 'desc')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {

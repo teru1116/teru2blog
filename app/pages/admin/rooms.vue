@@ -33,7 +33,6 @@ export default {
     })
   },
   created () {
-    this.$store.dispatch('admin/room/fetchAllRooms')
     this.$store.dispatch('admin/room/listenAllRooms')
   },
   destroyed () {
