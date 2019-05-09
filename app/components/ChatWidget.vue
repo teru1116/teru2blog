@@ -98,12 +98,15 @@ export default {
 .chat-widget {
   position: absolute;
   bottom: 0;
-  right: 15px;
   background-color: #fff;
   @media screen and (min-width: 600px) {
+    right: 15px;
     width: 300px;
   }
-  @media screen and (max-width: 599px) {}
+  @media screen and (max-width: 599px) {
+    right: 0;
+    width: 75vw;
+  }
   .widget-header {
     display: flex;
     background-color: #0070c9;
@@ -130,6 +133,7 @@ export default {
     }
     .input-footer {
       display: flex;
+      align-items: flex-end;
       border-top: 1px solid #e6e6e6;
       padding: 8px 8px;
       .textbox-wrapper {

@@ -99,6 +99,7 @@ export default {
     right: 0;
     bottom: 0;
     display: flex;
+    align-items: flex-end;
     border-top: 1px solid #e6e6e6;
     padding: 8px 8px;
     background-color: #fff;

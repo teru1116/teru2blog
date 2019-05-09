@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     applyStyles () {
-      this.setTextAreaSize(32)
+      this.setTextAreaSize(18)
       this.$nextTick().then(() => {
         this.setTextAreaSize()
         window.setTimeout(() => {
@@ -86,7 +86,7 @@ export default {
 <style lang="scss" scoped>
 textarea {
   resize: none;
-  height: 32px;
+  height: 24px;
   font-size: 14px;
   outline: 0;
 }
