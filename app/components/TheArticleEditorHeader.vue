@@ -24,7 +24,7 @@
             <li v-if="showsDeleteButton">
               <button @click="onDeleteButtonClick">削除</button>
             </li>
-            <li>
+            <li v-if="showsPostButton">
               <button class="submit" @click="onPostButtonClick">投稿</button>
             </li>
           </ul>
@@ -51,6 +51,9 @@ export default {
     },
     showsSaveButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-preview' || this.$route.name === 'admin-articles-articleId-edit'
+    },
+    showsPostButton () {
+      return this.$route.name !== 'admin-articles-articleId'
     },
     editPagePath () {
       return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`
