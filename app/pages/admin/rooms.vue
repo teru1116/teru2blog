@@ -11,7 +11,7 @@
         </ul>
       </div>
     </template>
-    <template v-if="!$isMobile || $isMobile && $route.params.roomId">
+    <template v-if="$route.params.roomId">
       <div class="room-messages-wrapper">
         <nuxt-child />
       </div>
@@ -33,6 +33,7 @@ export default {
     })
   },
   created () {
+    this.$store.dispatch('admin/room/fetchAllRooms')
     this.$store.dispatch('admin/room/listenAllRooms')
   },
   destroyed () {
