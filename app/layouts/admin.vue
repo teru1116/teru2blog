@@ -5,7 +5,7 @@
         <div class="header-left-wrapper">
           <h1>管理画面</h1>
         </div>
-        <div class="header-right-wrapper">
+        <div class="header-right-wrapper" v-if="$route.name !== 'admin-auth'">
           <nav>
             <ul>
               <li>
