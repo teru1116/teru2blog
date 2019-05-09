@@ -15,7 +15,7 @@
                 <nuxt-link to="/admin/rooms">チャット</nuxt-link>
               </li>
               <li>
-                <button>ログアウト</button>
+                <button @click="signOut">ログアウト</button>
               </li>
             </ul>
           </nav>
@@ -27,6 +27,18 @@
     </main>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    async signOut () {
+      await this.$firebase.auth().signOut()
+      this.$router.push('/admin/auth')
+    }
+  }
+}
+</script>
+
 
 <style lang="scss" scoped>
 header {

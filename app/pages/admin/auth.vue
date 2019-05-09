@@ -20,8 +20,9 @@ export default {
     }
   },
   methods: {
-    signIn () {
-      //
+    async signIn () {
+      await this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      this.$router.push('/admin/articles')
     }
   },
   layout: 'admin'
