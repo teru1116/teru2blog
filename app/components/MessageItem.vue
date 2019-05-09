@@ -57,6 +57,7 @@ export default {
     color: #222;
     padding: 4px 8px;
     border-radius: 4px;
+    max-width: 80%;
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
     p {
