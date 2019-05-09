@@ -3,17 +3,17 @@
     <div class="inner">
       <!-- 最新記事 -->
       <section id="article-list-recent">
-          <h2>
-            最新記事
-            <hr/>
-          </h2>
-          <ol>
-            <ArticleListItem
-              v-for="(article, index) in articles"
-              :key="index"
-              :article="article"
-            />
-          </ol>
+        <h2>
+          最新記事
+          <hr/>
+        </h2>
+        <ol>
+          <ArticleListItem
+            v-for="(article, index) in articles"
+            :key="index"
+            :article="article"
+          />
+        </ol>
       </section>
       <aside>
         <!-- カテゴリー -->
