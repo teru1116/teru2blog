@@ -1,12 +1,8 @@
 <template>
   <li>
     <nuxt-link :to="$route.params.roomId ? `${room.id}` : `rooms/${room.id}`">
-      <div class="room-list-item-left">
-        <p>{{ room.lastMessageText }}</p>
-      </div>
-      <div class="room-list-item-right">
-        <time>{{ dateString }}</time>
-      </div>
+      <time>{{ dateString }}</time>
+      <p>{{ room.lastMessageText }}</p>
     </nuxt-link>
   </li>
 </template>
@@ -34,13 +30,27 @@ export default {
 
 <style lang="scss" scoped>
 li {
-  height: 50px;
+  height: 60px;
   border-bottom: 1px solid rgba(34,34,34,0.2);
   a {
-    display: flex;
-    justify-content: space-between;
-    .room-list-item-left {}
-    .room-list-item-right {}
+    display: block;
+    padding: 8px 12px;
+    time {
+      color: #555;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    p {
+      color: #333;
+      font-size: 15px;
+      line-height: 1.76;
+      margin: 4px 0 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      white-space: nowrap;
+    }
   }
 }
 </style>
