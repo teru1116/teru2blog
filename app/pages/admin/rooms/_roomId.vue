@@ -46,12 +46,6 @@ export default {
       footerHeight: 32
     }
   },
-  watch: {
-    '$route.params.roomId': function (roomId) {
-      this.$store.dispatch('admin/message/unlistenAllMessages', this.$route.params.roomId)
-      this.$store.dispatch('admin/message/listenAllMessages', roomId)
-    }
-  },
   methods: {
     onClickSendButton () {
       const roomId = this.$route.params.roomId

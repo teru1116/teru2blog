@@ -32,6 +32,15 @@ export default {
       rooms: state => state.admin.room.rooms
     })
   },
+  watch: {
+    '$route.params.roomId': {
+      handler (newRoomId, oldRoomId) {
+        this.$store.dispatch('admin/message/unlistenAllMessages', oldRoomId)
+        this.$store.dispatch('admin/message/clearState')
+        this.$store.dispatch('admin/message/listenAllMessages', newRoomId)
+      }
+    }
+  },
   created () {
     this.$store.dispatch('admin/room/listenAllRooms')
   },
