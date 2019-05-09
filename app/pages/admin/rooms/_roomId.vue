@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages: state => state.admin.message.messages
+      messages () { return this.$store.state.admin.message.messages }
     })
   },
   data () {
