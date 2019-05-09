@@ -18,13 +18,19 @@
       <aside>
         <!-- カテゴリー -->
         <section id="category-list">
-          <h2>
-            カテゴリー
-            <hr/>
-          </h2>
+          <h2>カテゴリー<hr/></h2>
           <ul>
             <li v-for="(categoryName, index) in categories" :key="index">
               <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
+            </li>
+          </ul>
+        </section>
+        <!-- 月別 -->
+        <section id="monthly-list">
+          <h2>月別<hr/></h2>
+          <ul>
+            <li v-for="(month, index) in months" :key="index">
+              <nuxt-link :to="`/monthly/${month}`">{{ `${month.substr(0, 4)}年${month.substr(5, 2)}月` }}</nuxt-link>
             </li>
           </ul>
         </section>
@@ -50,7 +56,8 @@ export default {
   computed: {
     ...mapState({
       articles: state => state.article.recentArticles,
-      categories: state => state.category.categories
+      categories: state => state.category.categories,
+      months: state => state.monthly.months
     })
   },
   async created () {
@@ -63,6 +70,9 @@ export default {
 
     // カテゴリー取得
     this.$store.dispatch('category/fetchAllCategory')
+
+    // 月別取得
+    this.$store.dispatch('monthly/fetchAllMonth')
   },
   layout: 'site'
 }
@@ -101,6 +111,20 @@ section {
   }
 }
 section#category-list {
+  ul {
+    margin: 16px 0 0;
+    li {
+      a {
+        color: #0052A3;
+        padding: 2px 0;
+        display: inline-block;
+        @media screen and (min-width: 600px) {}
+        @media screen and (max-width: 599px) {}
+      }
+    }
+  }
+}
+section#monthly-list {
   ul {
     margin: 16px 0 0;
     li {
