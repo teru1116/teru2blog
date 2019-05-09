@@ -22,7 +22,10 @@ export default {
   computed: {
     dateString () {
       const lastMessageDate = this.room.lastMessageDate
-      return `${lastMessageDate.getFullYear()}.${lastMessageDate.getMonth() + 1}.${lastMessageDate.getDate()}`
+      const weekdays = ['日', '月', '火', '水', '木', '金', '土']
+      return lastMessageDate
+        ? `${lastMessageDate.getFullYear()}.${lastMessageDate.getMonth() + 1}.${lastMessageDate.getDate()}(${weekdays[lastMessageDate.getDay()]}) ${lastMessageDate.getHours()}:${lastMessageDate.getMinutes()}`
+        : null
     }
   }
 }
