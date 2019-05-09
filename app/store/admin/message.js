@@ -70,10 +70,27 @@ const actions = {
   // すでにストアに存在しているメッセージを、DBに送信する
   async sendMessage ({ commit }, { roomId, message }) {
     delete message.status
-    message['createdDate'] = firebase.firestore.FieldValue.serverTimestamp()
-    const ref = db.collection('rooms').doc(roomId).collection('messages').doc(message.id)
-    await ref.set(message)
-    const doc = await ref.get()
+    const messageDate = firebase.firestore.FieldValue.serverTimestamp()
+    message['createdDate'] = messageDate
+
+    const batch = db.batch()
+    const roomRef = db.collection('rooms').doc(roomId)
+    const messageRef = db.collection('rooms').doc(roomId).collection('messages').doc(message.id)
+    
+    // ルームDBを更新
+    batch.set(roomRef, {
+      lastMessageId: message.id,
+      lastMessageUid: message.uid,
+      lastMessageText: message.text,
+      lastMessageDate: messageDate
+    })
+    // メッセージDBを更新
+    batch.set(messageRef, message)
+    
+    await batch.commit()
+    
+    // ストアのメッセージを更新
+    const doc = await messageRef.get()
     const fetchedMessage = Object.assign({ id: doc.id }, doc.data())
     fetchedMessage.createdDate = doc.data().createdDate.toDate()
     commit('updateMessage', fetchedMessage)

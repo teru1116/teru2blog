@@ -45,7 +45,7 @@ const mutations = {
 const actions = {
   async fetchAllRooms ({ commit }) {
     let results = []
-    const snapshot = await db.collection('rooms').where('isTestData', '==', true).get()
+    const snapshot = await db.collection('rooms').where('isTestData', '==', false).get()
     snapshot.forEach(doc => {
       results.push(Object.assign({ id: doc.id }, doc.data()))
     })
@@ -57,7 +57,9 @@ const actions = {
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
           const room = Object.assign({ id: change.doc.id }, change.doc.data())
-          room.lastMessageDate = change.doc.data().lastMessageDate.toDate()
+          if (change.doc.data().lastMessageDate) {
+            room.lastMessageDate = change.doc.data().lastMessageDate.toDate()
+          }
           if (change.type === 'added') {
             commit('addRoom', room)
           }

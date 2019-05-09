@@ -76,6 +76,7 @@ const actions = {
     const batch = db.batch()
     const roomRef = db.collection('rooms').doc(roomId)
     const messageRef = db.collection('rooms').doc(roomId).collection('messages').doc(message.id)
+    
     // ルームDBを更新
     batch.set(roomRef, {
       lastMessageId: message.id,
@@ -85,7 +86,9 @@ const actions = {
     })
     // メッセージDBを更新
     batch.set(messageRef, message)
+    
     await batch.commit()
+    
     // ストアのメッセージを更新
     const doc = await messageRef.get()
     const fetchedMessage = Object.assign({ id: doc.id }, doc.data())
