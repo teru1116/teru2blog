@@ -1,20 +1,15 @@
 <template>
   <div class="chatroom">
     <!-- チャット表示部 -->
-    <div class="messages-view">
+    <div class="messages-view" :style="{ height: `calc(100vh - 48px - 16px - ${footerHeight}px)` }">
       <ol>
         <li v-for="(message, index) in messages" :key="index">
-          <MessageItem
-            :message="message"
-          />
+          <MessageItem :message="message" />
         </li>
       </ol>
     </div>
     <!-- チャット入力部 -->
-    <div
-      class="input-footer"
-      :style="{ height: `${footerHeight}px` }"
-    >
+    <div class="input-footer" :style="{ height: `${footerHeight}px` }">
       <div class="textbox-wrapper">
         <AutogrowTextarea
           v-model="inputMessageText"
@@ -48,7 +43,7 @@ export default {
   data () {
     return {
       inputMessageText: '',
-      footerHeight: 50
+      footerHeight: 32
     }
   },
   watch: {
@@ -106,6 +101,7 @@ export default {
     display: flex;
     border-top: 1px solid #e6e6e6;
     padding: 8px 8px;
+    background-color: #fff;
     .textbox-wrapper {
       flex: 1;
       textarea {
