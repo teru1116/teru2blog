@@ -24,7 +24,9 @@ export default {
   },
   computed: {
     isMine () {
-      return this.message.uid === this.$store.state.user.uid
+      return this.$route.name === 'admin-rooms-roomId'
+        ? this.message.uid === 'admin'
+        : this.message.uid === this.$store.state.user.uid
     },
     messageTime () {
       const createdDate = this.message.createdDate
