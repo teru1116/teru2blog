@@ -22,6 +22,12 @@ html {
 h2 {
   font-size: 24px;
   margin: 24px 0 0;
+  @media screen and (min-width: 600px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 599px) {
+    font-size: 18px;
+  }
   hr {
     background-color: #0070c9;
     background: linear-gradient(#42a1ec, #0070c9);
