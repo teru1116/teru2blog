@@ -31,7 +31,7 @@ const mutations = {
         const room = payload
         // ルームを最新に持ってくる
         state.rooms.splice(index, 1)
-        state.rooms.push(room)
+        state.rooms.unshift(room)
         break
       }
     }
