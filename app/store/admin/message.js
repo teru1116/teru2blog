@@ -125,7 +125,7 @@ const actions = {
             // リッスン開始時間より後に登録されたメッセージ = 自身が入室した後で新たに登録されたメッセージ
             } else {
               // 運営からのメッセージであれば、ストアに追加する
-              if (!message.uid || message.uid === 'admin') {
+              if (message.uid !== 'admin') {
                 commit('addReceivedMessage', message)
               // 自分のメッセージであれば、すでにストアに追加されているはずなのでupdate
               } else {
