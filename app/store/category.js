@@ -40,9 +40,8 @@ const actions = {
   },
 
   async fetchArticles ({ commit }, categoryName) {
-    console.log(categoryName)
     let results = []
-    const snapshot = await db.collection('articles').where('categories', 'array-contains',categoryName).orderBy('createdDate', 'desc').limit(10).get()
+    const snapshot = await db.collection('articles').where('categories', 'array-contains', categoryName).orderBy('createdDate', 'desc').limit(10).get()
     snapshot.forEach(doc => {
       results.push(Object.assign({ id: doc.id }, doc.data()))
     })

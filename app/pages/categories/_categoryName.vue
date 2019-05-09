@@ -1,6 +1,5 @@
 <template>
   <div class="inner">
-    <!-- 最新記事 -->
     <section id="article-list-recent">
       <h2>{{ $route.params.categoryName }}<hr/></h2>
       <ol>
