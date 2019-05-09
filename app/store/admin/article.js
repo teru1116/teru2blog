@@ -157,6 +157,7 @@ const actions = {
   async postArticle ({ dispatch, commit, state }, { isTestData }) {
     const article = state.displayingArticle
     const batch = db.batch()
+    // 記事
     batch.set(db.collection('articles').doc(article.id), {
       title: article.title,
       contentHTML: article.contentHTML,      
@@ -166,12 +167,22 @@ const actions = {
       isPublished: true,
       isTestData
     })
+    // カテゴリー
     if (state.displayingArticle.unregisteredCategories) {
       state.displayingArticle.unregisteredCategories.forEach(categoryName => {
-        batch.set(db.collection('articleCategories').doc(categoryName))
+        batch.set(db.collection('articleCategories').doc(categoryName), {})
       })
     }
+    // 月別
+    const year = article.createdDate.getFullYear()
+    let month = article.createdDate.getMonth() + 2
+    if (month < 10) {
+      month = `0${month}`
+    }
+    batch.set(db.collection('articleMonths').doc(`${year}-${month}`), {})
+
     await batch.commit()
+
     commit('clearDisplayingArticle')
     await dispatch('fetchAllArticles')
     return
