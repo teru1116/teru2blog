@@ -50,6 +50,12 @@ export default {
     { src: '~/plugins/isMobile.js', ssr: false }
   ],
 
+  router: {
+    middleware: [
+      'authAdmin'
+    ]
+  },
+
   /*
   ** Nuxt.js modules
   */
