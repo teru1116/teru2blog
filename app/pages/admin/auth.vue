@@ -21,7 +21,22 @@ export default {
   },
   methods: {
     async signIn () {
-      await this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      await this.$firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(error => {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            this.errorMessage = 'メールアドレスが正しくありません。'
+            break
+          case 'auth/invalid-email':
+            this.errorMessage = 'メールアドレスが正しくありません。'
+            break
+          case 'auth/wrong-password':
+            this.errorMessage = 'パスワードが正しくありません。'
+            break
+          default:
+            this.errorMessage = 'ログインに失敗しました。'
+            break
+        }
+      })
       this.$router.push('/admin/articles')
     }
   },
@@ -59,23 +74,26 @@ section {
   form {
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
-   input[type=email], input[type=password] {
-      margin-bottom: 16px;
-      font-size: 14px;
-      padding: 4px 2px;
+    input[type=email], input[type=password] {
+        margin-bottom: 16px;
+        font-size: 14px;
+        padding: 4px 2px;
+        @media screen and (min-width: 600px) {}
+        @media screen and (max-width: 599px) {}
+    }
+    small {
+      color: red;
+      font-size: 13px;
+      font-weight: bold;
       @media screen and (min-width: 600px) {}
       @media screen and (max-width: 599px) {}
-   }
-   small {
-     @media screen and (min-width: 600px) {}
-     @media screen and (max-width: 599px) {}
-   }
-   button.submit {
-     width: 100%;
-     margin-top: 24px;
-     @media screen and (min-width: 600px) {}
-     @media screen and (max-width: 599px) {}
-   }
+    }
+    button.submit {
+      width: 100%;
+      margin-top: 24px;
+      @media screen and (min-width: 600px) {}
+      @media screen and (max-width: 599px) {}
+    }
   }
 }
 </style>
