@@ -83,7 +83,6 @@ li {
       position: relative;
       h3 {
         font-weight: bold;
-        // 3行まで
         overflow: hidden;
         @media screen and (min-width: 600px) {
           font-size: 18px;
