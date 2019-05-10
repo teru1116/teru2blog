@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     contentString () {
-      return this.article.contentHTML.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').slice(0, 100)
+      return `${this.article.contentHTML.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').slice(0, 80)}...`
     },
     dateString () {
       const createdDate = this.article.createdDate.toDate()
@@ -82,14 +82,20 @@ li {
       flex: 1;
       position: relative;
       h3 {
-        font-size: 18px;
         font-weight: bold;
-        line-height: 1.1;
-        margin-bottom: 16px;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
+        // 3行まで
         overflow: hidden;
+        @media screen and (min-width: 600px) {
+          font-size: 18px;
+          line-height: 1.4;
+          height: 2.8em;
+          margin-bottom: 4px;
+        }
+        @media screen and (max-width: 599px) {
+          font-size: 16px;
+          line-height: 1.1;
+          height: 3.15em;
+        }
       }
       p {
         color: #333;
