@@ -1,7 +1,7 @@
 <template>
   <div class="inner">
     <section id="article-list-recent">
-      <h2>{{ $route.params.categoryName }}<hr/></h2>
+      <h2>{{ $route.params.categoryName }}<hr class="gradation" /></h2>
       <ol>
         <ArticleListItem
           v-for="(article, index) in articles"

@@ -1,7 +1,7 @@
 <template>
   <div class="inner">
     <section id="article-list-recent">
-      <h2>{{ `${year}年${month}月` }}<hr/></h2>
+      <h2>{{ `${year}年${month}月` }}<hr class="gradation" /></h2>
       <ol>
         <ArticleListItem
           v-for="(article, index) in articles"
