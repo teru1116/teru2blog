@@ -44,8 +44,6 @@ header {
   background-color: #fff;
   box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
   .inner {
-    display: flex;
-    justify-content: space-between;
     .header-left-wrapper {
       h1 {
         color: #333;
@@ -54,15 +52,9 @@ header {
     .header-right-wrapper {
       nav {
         ul {
-          display: flex;
-          align-items: center;
-          height: 48px;
           li {
-            margin-left: 16px;
             a, button {
               color: #757575;
-              font-size: 14px;
-              font-weight: 400;
             }
           }
         }

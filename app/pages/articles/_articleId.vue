@@ -1,25 +1,28 @@
 <template>
   <article>
-    <ArticleContent />
+    <ArticleContent class="article-body" />
     <!-- コメント一覧 -->
-    <section class="comments">
-      <ul>
-        <CommentListItem v-for="(comment, index) in comments" :key="index" :comment="comment" />
-      </ul>
+    <section class="comment-list inner">
+      <h3>コメント</h3>
+      <CommentListItem v-for="(comment, index) in comments" :key="index" :comment="comment" />
     </section>
     <!-- コメント投稿 -->
-    <section class="input-comment"></section>
+    <section class="input-comment inner">
+      <CommentEditor v-on:onCommentPost="fetchComments" />
+    </section>
   </article>
 </template>
 
 <script>
 import ArticleContent from './../../components/TheArticleContent'
 import CommentListItem from './../../components/ArticleCommentListItem'
+import CommentEditor from './../../components/TheCommentEditor'
 
 export default {
   components: {
     ArticleContent,
-    CommentListItem
+    CommentListItem,
+    CommentEditor
   },
   data () {
     return {
@@ -31,6 +34,7 @@ export default {
       const db = this.$firebase.firestore()
       const articleId = this.$route.params.articleId
       const snapshot = await db.collection('articles').doc(articleId).collection('comments').orderBy('createdDate').get()
+      this.comments = []
       snapshot.forEach(doc => {
         const comment = Object.assign({ id: doc.id }, doc.data())
         this.comments.push(comment)
@@ -43,3 +47,12 @@ export default {
   layout: 'site'
 }
 </script>
+
+<style lang="scss" scoped>
+article {
+  margin-bottom: 40px;
+  .article-body {
+    margin-bottom: 40px;
+  }
+}
+</style>
