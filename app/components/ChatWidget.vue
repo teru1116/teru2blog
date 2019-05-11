@@ -102,6 +102,7 @@ export default {
   position: absolute;
   bottom: -367px;
   background-color: #fff;
+  border-color: #0052A3;
   &.isExpanded {
     bottom: 0;
   }
@@ -115,27 +116,30 @@ export default {
   }
   .widget-header {
     display: flex;
-    background-color: #0070c9;
-    background: linear-gradient(#42a1ec,#0070c9);
+    background-color: #0052A3;
+    border-radius: 4px 4px 0 0;
     color: #fff;
-    padding: 12px 8px;
+    padding: 6px 8px;
     @media screen and (min-width: 600px) {}
     @media screen and (max-width: 599px) {}
     .toggle-widget {
       height: 16px;
       margin-right: 4px;
       i {
-        font-size: 16px;
+        font-size: 20px;
         color: #fff;
       }
     }
     h2 {
-      font-size: 16px;
-      line-height: 16px;
+      color: #fff;
+      font-size: 14px;
+      line-height: 18px;
       margin: 0;
     }
   }
   .widget-body {
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
     .messages-view {
       padding: 0 8px;
       overflow: scroll;

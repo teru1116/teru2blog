@@ -4,8 +4,9 @@
       <!-- 最新記事 -->
       <section id="article-list-recent">
         <h2>
-          最新記事
-          <hr/>
+          RECENT
+          <small>最新記事</small>
+          <hr class="gradation" />
         </h2>
         <ol>
           <ArticleListItem
@@ -18,7 +19,10 @@
       <aside>
         <!-- カテゴリー -->
         <section id="category-list">
-          <h2>カテゴリー<hr/></h2>
+          <h2>
+            カテゴリー
+            <hr class="gradation" />
+          </h2>
           <ul>
             <li v-for="(categoryName, index) in categories" :key="index">
               <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
@@ -27,7 +31,10 @@
         </section>
         <!-- 月別 -->
         <section id="monthly-list">
-          <h2>月別<hr/></h2>
+          <h2>
+            月別
+            <hr class="gradation" />
+          </h2>
           <ul>
             <li v-for="(month, index) in months" :key="index">
               <nuxt-link :to="`/monthly/${month}`">{{ `${month.substr(0, 4)}年${month.substr(5, 2)}月` }}</nuxt-link>
@@ -90,14 +97,18 @@ export default {
     }
     @media screen and (max-width: 599px) {}
   }
+  h2 {
+    small {}
+  }
   aside {
     @media screen and (min-width: 600px) {
       width: 200px;
       margin-left: 40px;
+      padding-top: 8px;
     }
     @media screen and (max-width: 599px) {}
     h2 {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
     }
   }
@@ -116,6 +127,7 @@ section#category-list {
     li {
       a {
         color: #0052A3;
+        font-size: 14px;
         padding: 2px 0;
         display: inline-block;
         @media screen and (min-width: 600px) {}
@@ -130,6 +142,7 @@ section#monthly-list {
     li {
       a {
         color: #0052A3;
+        font-size: 14px;
         padding: 2px 0;
         display: inline-block;
         @media screen and (min-width: 600px) {}

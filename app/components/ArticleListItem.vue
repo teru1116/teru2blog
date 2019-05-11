@@ -21,7 +21,7 @@
         </div>
       </div>
     </nuxt-link>
-    <hr />
+    <hr class="gradation" />
   </li>
 </template>
 
@@ -103,16 +103,18 @@ li {
       }
       .metadata {
         display: flex;
+        align-items: baseline;
         position: absolute;
         bottom: 0;
         ul.category-list {
           display: flex;
+          align-items: baseline;
           @media screen and (min-width: 600px) {}
           @media screen and (max-width: 599px) {}
           li {
             margin-right: 4px;
             color: #0052A3;
-            font-size: 15px;
+            font-size: 14px;
             display: inline-flex;
             &:after {
               content: ",";
@@ -135,13 +137,6 @@ li {
         }
       }
     }
-  }
-  hr {
-    background-color: #0070c9;
-    background: linear-gradient(#42a1ec, #0070c9);
-    height: 1px;
-    border: 0;
-    margin: 0;
   }
 }
 </style>
