@@ -18,8 +18,7 @@ const defaultState = () => {
       unregisteredCategories: [],
       createdDate: new Date()
     },
-    // mock
-    registeredCategories: ['技術', 'アジャイル', 'スクラム', '開発委託', 'プロジェクト'],
+    registeredCategories: []
   }
 }
 
@@ -39,6 +38,10 @@ const mutations = {
     state.displayingArticle = payload
     state.displayingArticle.selectedCategories = payload.categories
     state.displayingArticle.createdDate = payload.createdDate.toDate()
+  },
+
+  setRegisteredCategories (state, payload) {
+    state.registeredCategories = payload
   },
 
   refleshArticleId (state) {
@@ -109,6 +112,15 @@ const actions = {
     const article = Object.assign({ id: doc.id }, doc.data())
     commit('setDisplayingArticle', article)
     return
+  },
+
+  async fetchCategories ({ commit }) {
+    let results = []
+    const snapshot = await db.collection('articleCategories').get()
+    snapshot.forEach(doc => {
+      results.push(doc.id)
+    })
+    commit('setRegisteredCategories', results)
   },
 
   refleshArticleId ({ commit }) {

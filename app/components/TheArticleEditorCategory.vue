@@ -57,6 +57,9 @@ export default {
 
       this.inputCategoryName = ''
     }
+  },
+  created () {
+    this.$store.dispatch('admin/article/fetchCategories')
   }
 }
 </script>
