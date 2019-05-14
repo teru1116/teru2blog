@@ -94,6 +94,7 @@ li {
           font-size: 16px;
           line-height: 1.1;
           height: 3.15em;
+          margin-bottom: 8px;
         }
       }
       p {
@@ -102,19 +103,20 @@ li {
         line-height: 1.76;
       }
       .metadata {
-        display: flex;
         align-items: baseline;
-        position: absolute;
-        bottom: 0;
+        @media screen and (min-width: 600px) {
+          position: absolute;
+          bottom: 0;
+        }
         ul.category-list {
-          display: flex;
+          display: inline-block;
           align-items: baseline;
           @media screen and (min-width: 600px) {}
           @media screen and (max-width: 599px) {}
           li {
             margin-right: 4px;
             color: #0052A3;
-            font-size: 14px;
+            font-size: 12px;
             display: inline-flex;
             &:after {
               content: ",";
@@ -131,9 +133,12 @@ li {
           }
         }
         time {
-          margin-left: 8px;
           color: #555;
+          font-size: 12px;
           font-weight: bold;
+          @media screen and (min-width: 600px) {
+            margin-left: 8px;
+          }
         }
       }
     }

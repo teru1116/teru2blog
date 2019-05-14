@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-section#article-list-monthly {
+section#article-list-category {
   @media screen and (min-width: 600px) {
     min-width: 816px;
   }
