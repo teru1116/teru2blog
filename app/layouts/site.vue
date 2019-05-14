@@ -3,7 +3,11 @@
     <header class="page-header">
       <div class="inner">
         <div class="header-left-wrapper">
-          <h1>Noilan</h1>
+          <h1>
+            <nuxt-link to="/">
+              <i class="material-icons">create</i>Blog Title
+            </nuxt-link>
+          </h1>
         </div>
         <div class="header-right-wrapper">
           <nav>
@@ -44,6 +48,15 @@ header.page-header {
     .header-left-wrapper {
       h1 {
         color: #fff;
+        a {
+          color: #fff;
+          display: flex;
+          align-items: center;
+        }
+        i {
+          font-size: 28px;
+          margin-right: 8px;
+        }
       }
     }
     .header-right-wrapper {
