@@ -26,6 +26,13 @@
         <ChatWidget/>
       </div>
     </main>
+    <footer>
+      <div class="inner">
+        <small class="copylight">
+          Copyright © Teruya Kusumoto
+        </small>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -74,6 +81,9 @@ header.page-header {
     }
   }
 }
+main {
+  min-height: calc(100vh - 48px);
+}
 .chatwidget-parent {
   position: fixed;
   bottom: 0;
@@ -86,6 +96,14 @@ header.page-header {
   @media screen and (max-width: 599px) {
     left: 15px;
     right: 15px;
+  }
+}
+footer {
+  padding: 16px 0 48px;
+  background-color: #e6e6e6;
+  small.copylight {
+    font-size: 13px;
+    color: #333;
   }
 }
 </style>
