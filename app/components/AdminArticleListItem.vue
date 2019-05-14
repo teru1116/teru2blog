@@ -125,6 +125,9 @@ article {
         @media screen and (max-width: 599px) {
           top: 30px;
           width: calc(100vw - 32px - 98px);
+          height: 3.15em;
+          font-size: 16px;
+          line-height: 1.1;
         }
       }
     }
