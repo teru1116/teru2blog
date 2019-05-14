@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="inner">
+    <div class="inner columns-wrapper">
       <!-- 最新記事 -->
       <section id="article-list-recent">
         <h2>
@@ -17,69 +17,37 @@
         </ol>
       </section>
       <aside>
-        <!-- カテゴリー -->
-        <section id="category-list">
-          <h2>
-            カテゴリー
-            <hr class="gradation" />
-          </h2>
-          <ul>
-            <li v-for="(categoryName, index) in categories" :key="index">
-              <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
-            </li>
-          </ul>
-        </section>
-        <!-- 月別 -->
-        <section id="monthly-list">
-          <h2>
-            月別
-            <hr class="gradation" />
-          </h2>
-          <ul>
-            <li v-for="(month, index) in months" :key="index">
-              <nuxt-link :to="`/monthly/${month}`">{{ `${month.substr(0, 4)}年${month.substr(5, 2)}月` }}</nuxt-link>
-            </li>
-          </ul>
-        </section>
+        <SectionCategory />
+        <SectionMonthly />
       </aside>
-    </div>
-    <!-- チャットでお問い合わせ -->
-    <div class="chatwidget-parent">
-      <ChatWidget/>
     </div>
   </div>
 </template>
 
 <script>
 import ArticleListItem from './../components/ArticleListItem'
-import ChatWidget from './../components/ChatWidget'
-import { mapState } from 'vuex';
+import SectionCategory from './../components/TheSectionCategory'
+import SectionMonthly from './../components/TheSectionMonthly'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     ArticleListItem,
-    ChatWidget
+    SectionCategory,
+    SectionMonthly
   },
   computed: {
     ...mapState({
-      articles: state => state.article.recentArticles,
-      categories: state => state.category.categories,
-      months: state => state.monthly.months
+      articles: state => state.article.recentArticles
     })
   },
   async created () {
     // ブラウザ識別
-    const userCredential = await this.$firebase.auth().signInAnonymously()
-    this.$store.dispatch('user/updateUser', userCredential)
+    // const userCredential = await this.$firebase.auth().signInAnonymously()
+    // this.$store.dispatch('user/updateUser', userCredential)
 
     // 記事取得
     this.$store.dispatch('article/fetchRecentArticles')
-
-    // カテゴリー取得
-    this.$store.dispatch('category/fetchAllCategory')
-
-    // 月別取得
-    this.$store.dispatch('monthly/fetchAllMonth')
   },
   layout: 'site'
 }
@@ -97,21 +65,6 @@ export default {
     }
     @media screen and (max-width: 599px) {}
   }
-  h2 {
-    small {}
-  }
-  aside {
-    @media screen and (min-width: 600px) {
-      width: 200px;
-      margin-left: 40px;
-      padding-top: 8px;
-    }
-    @media screen and (max-width: 599px) {}
-    h2 {
-      font-size: 12px;
-      font-weight: bold;
-    }
-  }
 }
 section {
   @media screen and (min-width: 600px) {
@@ -119,50 +72,6 @@ section {
   }
   @media screen and (max-width: 599px) {
     margin-bottom: 60px;
-  }
-}
-section#category-list {
-  ul {
-    margin: 16px 0 0;
-    li {
-      a {
-        color: #0052A3;
-        font-size: 14px;
-        padding: 2px 0;
-        display: inline-block;
-        @media screen and (min-width: 600px) {}
-        @media screen and (max-width: 599px) {}
-      }
-    }
-  }
-}
-section#monthly-list {
-  ul {
-    margin: 16px 0 0;
-    li {
-      a {
-        color: #0052A3;
-        font-size: 14px;
-        padding: 2px 0;
-        display: inline-block;
-        @media screen and (min-width: 600px) {}
-        @media screen and (max-width: 599px) {}
-      }
-    }
-  }
-}
-.chatwidget-parent {
-  position: fixed;
-  bottom: 0;
-  @media screen and (min-width: 600px) {
-    width: 1000px;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-  }
-  @media screen and (max-width: 599px) {
-    left: 15px;
-    right: 15px;
   }
 }
 </style>

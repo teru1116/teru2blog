@@ -1,6 +1,6 @@
 <template>
-  <div class="inner">
-    <section id="article-list-recent">
+  <div class="inner columns-wrapper">
+    <section id="article-list-monthly">
       <h2>{{ `${year}年${month}月` }}<hr class="gradation" /></h2>
       <ol>
         <ArticleListItem
@@ -10,16 +10,24 @@
         />
       </ol>
     </section>
+    <aside>
+      <SectionCategory />
+      <SectionMonthly />
+    </aside>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import ArticleListItem from './../../components/ArticleListItem'
+import SectionCategory from './../../components/TheSectionCategory'
+import SectionMonthly from './../../components/TheSectionMonthly'
 
 export default {
   components: {
-    ArticleListItem
+    ArticleListItem,
+    SectionCategory,
+    SectionMonthly
   },
   computed: {
     ...mapState({
@@ -45,6 +53,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//
+section#article-list-monthly {
+  @media screen and (min-width: 600px) {
+    min-width: 816px;
+  }
+  @media screen and (max-width: 599px) {}
+}
 </style>
 

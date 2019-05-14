@@ -1,5 +1,5 @@
 <template>
-  <section class="inner">
+  <section>
     <header class="article-header">
       <div class="article-metadata">
         <ul class="category-list">
@@ -35,7 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .article-header {
-  margin: 60px 0 35px;
+  margin: 30px 0 35px;
   .article-metadata {
     display: flex;
     ul {

@@ -45,6 +45,24 @@ hr.gradation {
   margin: 0;
 }
 
+.columns-wrapper {
+  @media screen and (min-width: 600px) {
+    display: flex;
+  }
+  aside {
+    @media screen and (min-width: 600px) {
+      width: 200px;
+      margin-left: 40px;
+      padding-top: 8px;
+    }
+    @media screen and (max-width: 599px) {}
+    h2 {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
 h3 {
   font-size: 18px;
   font-weight: bold;
