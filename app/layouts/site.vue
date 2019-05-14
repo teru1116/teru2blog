@@ -18,9 +18,23 @@
     </header>
     <main>
       <nuxt />
+      <div class="chatwidget-parent">
+        <ChatWidget/>
+      </div>
     </main>
   </div>
 </template>
+
+<script>
+import ChatWidget from './../components/ChatWidget'
+
+export default {
+  components: {
+    ChatWidget
+  }
+}
+</script>
+
 
 <style lang="scss" scoped>
 header.page-header {
@@ -45,6 +59,20 @@ header.page-header {
         }
       }
     }
+  }
+}
+.chatwidget-parent {
+  position: fixed;
+  bottom: 0;
+  @media screen and (min-width: 600px) {
+    width: 1000px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+  }
+  @media screen and (max-width: 599px) {
+    left: 15px;
+    right: 15px;
   }
 }
 </style>

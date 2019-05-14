@@ -163,7 +163,6 @@ export default {
         }
       }
       .sendbutton-wrapper {
-        width: 64px;
         margin-left: 8px;
       }
     }
