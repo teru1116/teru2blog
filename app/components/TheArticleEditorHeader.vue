@@ -66,7 +66,7 @@ export default {
     onDeleteButtonClick () {
       this.$store.dispatch('admin/article/deleteArticle')
     },
-    onPostButtonClick () {
+    async onPostButtonClick () {
       this.$store.dispatch('admin/article/postArticle', { isTestData: false })
     }
   }

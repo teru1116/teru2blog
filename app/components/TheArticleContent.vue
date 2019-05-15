@@ -3,8 +3,8 @@
     <header class="article-header">
       <div class="article-metadata">
         <ul class="category-list">
-          <li v-for="(categoryId, index) in article.selectedCategories" :key="index">
-            <nuxt-link :to="`categories/${categoryId}`">{{ categoryId }}</nuxt-link>
+          <li v-for="(categoryName, index) in article.selectedCategories" :key="index">
+            <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
           </li>
         </ul>
         <time>{{ createdDateString }}</time>
