@@ -2,7 +2,9 @@
   <div>
     <EditorHeader />
     <main>
-      <ArticleContent />
+      <div class="inner">
+        <ArticleContent />
+      </div>
     </main>
   </div>
 </template>
