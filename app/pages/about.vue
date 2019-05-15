@@ -4,7 +4,7 @@
       ABOUT
       <hr class="gradation" />
     </h2>
-    <p>
+    <p class="description">
       このサイトは、ブログのデモ環境です。<br />
       管理画面にログインして、記事の編集やチャット問い合わせの対応なども行えます。
     </p>
@@ -66,9 +66,9 @@ h3 {
   margin: 16px 0 8px;
 }
 p {
-  font-size: 16px;
-  line-height: 24px;
-  min-height: 24px;
+  font-size: 14px;
+  line-height: 18px;
+  margin: 16px 0 0;
 }
 a {
   text-decoration: underline;
