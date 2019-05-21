@@ -2,12 +2,13 @@
   <div>
     <EditorHeader />
     <main>
-      <Editor />
+      <Editor :title="title" :contentHTML="contentHTML" />
     </main>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import EditorHeader from './../../../../components/TheArticleEditorHeader'
 import Editor from './../../../../components/TheArticleEditor'
 
@@ -16,8 +17,14 @@ export default {
     EditorHeader,
     Editor
   },
+  computed: {
+    ...mapState({
+      title: state => state.admin.editingArticle.title,
+      contentHTML: state => state.admin.editingArticle.contentHTML
+    })
+  },
   created () {
-    this.$store.dispatch('admin/article/fetchArticle', this.$route.params.articleId)
+    this.$store.dispatch('admin/editingArticle/fetchArticle', this.$route.params.articleId)
   }
 }
 </script>

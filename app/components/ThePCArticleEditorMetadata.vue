@@ -24,7 +24,7 @@ export default {
   },
   data () {
     return {
-      defaultImageDataURL: this.$store.state.admin.article.displayingArticle.icatchImageDataURL
+      defaultImageDataURL: this.$store.state.admin.editingArticle.iCatchImageDataURL
     }
   },
   methods: {

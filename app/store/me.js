@@ -3,14 +3,14 @@ const state = () => ({
 })
 
 const mutations = {
-  updateUser (state, payload) {
+  setMe (state, payload) {
     state.uid = payload.user.uid
   }
 }
 
 const actions = {
-  updateUser ({ commit }, userCredential) {
-    commit('updateUser', userCredential)
+  setMe ({ commit }, userCredential) {
+    commit('setMe', userCredential)
   }
 }
 

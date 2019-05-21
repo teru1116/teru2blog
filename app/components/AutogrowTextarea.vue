@@ -87,7 +87,7 @@ export default {
 textarea {
   resize: none;
   height: 24px;
-  font-size: 14px;
+  font-size: 16px;  // iPhoneの自動ズームが効かないフォントサイズ
   outline: 0;
 }
 </style>

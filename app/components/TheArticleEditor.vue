@@ -35,6 +35,10 @@ export default {
     WysiwygEditor,
     PCEditorMetadata
   },
+  props: {
+    title: String,
+    contentHTML: String
+  },
   data () {
     return {
       editor: new Editor({
@@ -47,21 +51,25 @@ export default {
           new History(),
           new Iframe()
         ],
-        content: this.$store.state.admin.article.displayingArticle.contentHTML,
+        content: this.contentHTML,
         onUpdate: ({ getHTML }) => {
           this.onContentUpdate(getHTML())
         },
-      }),
-      title: this.$store.state.admin.article.displayingArticle.title
+      })
+    }
+  },
+  watch: {
+    contentHTML (newVal) {
+      this.editor.setContent(newVal)
     }
   },
   methods: {
     onTitleUpdate (e) {
       const title = e.target.value
-      this.$store.dispatch('admin/article/updateTitle', title)
+      this.$store.dispatch('admin/editingArticle/updateTitle', title)
     },
     onContentUpdate (contentHTML) {
-      this.$store.dispatch('admin/article/updateContentHTML', contentHTML)
+      this.$store.dispatch('admin/editingArticle/updateContentHTML', contentHTML)
     }
   },
   beforeDestroy() {

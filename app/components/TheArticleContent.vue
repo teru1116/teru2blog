@@ -3,7 +3,7 @@
     <header class="article-header">
       <div class="article-metadata">
         <ul class="category-list">
-          <li v-for="(categoryName, index) in article.selectedCategories" :key="index">
+          <li v-for="(categoryName, index) in article.categories" :key="index">
             <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
           </li>
         </ul>
@@ -17,17 +17,15 @@
 
 <script>
 export default {
-  computed: {
-    article () {
-      return this.$store.state.admin.article.displayingArticle
-    },
-    createdDateString () {
-      return `${this.article.createdDate.getFullYear()}.${this.article.createdDate.getMonth() + 1}.${this.article.createdDate.getDate()}`
-    }
+  props: {
+    article: Object
   },
-  created () {
-    if (this.$route.name === 'articles-articleId') {
-      this.$store.dispatch('admin/article/fetchArticle', this.$route.params.articleId)
+  computed: {
+    createdDateString () {
+      const createdDate = this.article.createdDate
+      return createdDate
+              ? `${createdDate.getFullYear()}.${createdDate.getMonth() + 1}.${createdDate.getDate()}`
+              : ''
     }
   }
 }

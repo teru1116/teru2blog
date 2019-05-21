@@ -38,16 +38,16 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: state => state.article.recentArticles
+      articles: state => state.articles
     })
   },
   async created () {
     // ブラウザ識別
-    // const userCredential = await this.$firebase.auth().signInAnonymously()
-    // this.$store.dispatch('user/updateUser', userCredential)
+    const userCredential = await this.$firebase.auth().signInAnonymously()
+    this.$store.dispatch('me/setMe', userCredential)
 
     // 記事取得
-    this.$store.dispatch('article/fetchRecentArticles')
+    this.$store.dispatch('articles/fetchArticles')
   },
   layout: 'site'
 }

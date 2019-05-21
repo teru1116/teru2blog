@@ -29,23 +29,23 @@ export default {
   },
   computed: {
     ...mapState({
-      rooms: state => state.admin.room.rooms
+      rooms: state => state.admin.rooms
     })
   },
   watch: {
     '$route.params.roomId': {
       handler (newRoomId, oldRoomId) {
-        this.$store.dispatch('admin/message/unlistenAllMessages', oldRoomId)
-        this.$store.dispatch('admin/message/clearState')
-        this.$store.dispatch('admin/message/listenAllMessages', newRoomId)
+        this.$store.dispatch('admin/messages/unlistenMessages', oldRoomId)
+        this.$store.dispatch('admin/messages/clearState')
+        this.$store.dispatch('admin/messages/listenMessages', newRoomId)
       }
     }
   },
   created () {
-    this.$store.dispatch('admin/room/listenAllRooms')
+    this.$store.dispatch('admin/rooms/listenRooms')
   },
   destroyed () {
-    this.$store.dispatch('admin/room/unlistenAllRooms')
+    this.$store.dispatch('admin/rooms/unlistenRooms')
   },
   layout: 'admin'
 }

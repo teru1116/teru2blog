@@ -6,7 +6,7 @@
           <!-- 公開/非公開 -->
           <div class="publish-status" :class="article.isPublished ? 'public' : 'private'">{{ article.isPublished ? '公開中' : '非公開' }}</div>
           <!-- アイキャッチ画像 -->
-          <div class="icatch-photo" :style="{ backgroundImage: `url(${article.icatchImageDataURL})` }" />
+          <div class="icatch-photo" :style="{ backgroundImage: `url(${article.iCatchImageDataURL})` }" />
           <!-- タイトル -->
           <h3>{{ article.title }}</h3>
         </div>

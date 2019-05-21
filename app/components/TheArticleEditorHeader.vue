@@ -31,11 +31,17 @@
         </nav>
       </div>
     </div>
+    <md-snackbar :md-position="'center'" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
+      <span>Connection timeout. Showing limited messages!</span>
+    </md-snackbar>
   </header>
 </template>
 
 <script>
 export default {
+  // components: {
+  //   MdSnackbar
+  // },
   computed: {
     showsPreviewButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-edit'
@@ -59,15 +65,20 @@ export default {
       return this.$route.params.articleId === '0' ? `/admin/articles/new` : `/admin/articles/${this.$route.params.articleId}/edit`
     }
   },
+  data () {
+    return {
+      showSnackbar: false
+    }
+  },
   methods: {
     onSaveButtonClick () {
-      this.$store.dispatch('admin/article/saveArticle', { isTestData: false })
+      this.$store.dispatch('admin/editingArticle/saveArticle', { isTestData: false })
     },
     onDeleteButtonClick () {
-      this.$store.dispatch('admin/article/deleteArticle')
+      this.$store.dispatch('admin/editingArticle/deleteArticle')
     },
-    async onPostButtonClick () {
-      this.$store.dispatch('admin/article/postArticle', { isTestData: false })
+    onPostButtonClick () {
+      this.$store.dispatch('admin/editingArticle/postArticle', { isTestData: false })
     }
   }
 }

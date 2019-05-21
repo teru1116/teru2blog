@@ -21,6 +21,7 @@ export default {
 <style lang="scss" scoped>
 article {
   position: relative;
+  margin-top: 16px;
 
   .menububble {
     position: absolute;

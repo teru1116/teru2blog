@@ -1,48 +1,58 @@
-import firebase from './../plugins/firebase'
-
+import firebase from '@@/app/plugins/firebase'
 const db = firebase.firestore()
 
-const defaultState = () => {
-  return {
-    // 新着順にソートされた記事のArray
-    recentArticles: [],
+const state = () => ({
+  title: '',
+  contentHTML: '',
+  categories: [],
+  createdDate: null,
+  isPublished: false,
+  isTestData: false,
+  comments: []
+})
+
+const actions = {
+  async fetchArticle ({ commit }, articleId) {
+    const doc = await db.collection('articles').doc(articleId).get()
+    const article = Object.assign({ id: doc.id }, doc.data())
+    article.createdDate = doc.data().createdDate.toDate()
+    commit('setArticle', article)
+  },
+
+  async fetchComments ({ commit }, articleId) {
+    const snapshot = await db.collection('articles').doc(articleId).collection('comments').orderBy('createdDate').get()
+    snapshot.forEach(doc => {
+      const comment = Object.assign({ id: doc.id }, doc.data())
+      commit('addComment', comment)
+    })
+  },
+
+  async postComment ({ commit }, { articleId, comment }) {
+    const commentId = comment.id
+    comment['createdDate'] = firebase.firestore.FieldValue.serverTimestamp()
+    await db.collection('articles').doc(articleId).collection('comments').doc(commentId).set(comment)
+
+    const doc = await db.collection('articles').doc(articleId).collection('comments').doc(commentId).get()
+    const newComment = Object.assign({ id: doc.id }, doc.data())
+    commit('addComment', newComment)
   }
-}
-
-const state = defaultState()
-
-const getters = {
-  recentArticles: state => state.recentArticles
 }
 
 const mutations = {
-  pushRecentArticles (state, payload) {
-    state.recentArticles = payload
+  setArticle (state, article) {
+    state = Object.assign(state, article)
   },
 
-  clearState (state) {
-    state = Object.assign(state, defaultState())
-  }
-}
-
-const actions = {
-  async fetchRecentArticles ({ commit }) {
-    let results = []
-    const snapshot = await db.collection('articles').orderBy('createdDate', 'desc').limit(10).get()
-    snapshot.forEach(doc => {
-      results.push(Object.assign({ id: doc.id }, doc.data()))
-    })
-    commit('pushRecentArticles', results)
-  },
-
-  clearState ({ commit }) {
-    commit('clearState')
+  addComment (state, comment) {
+    if (!state['comments']) {
+      state['comments'] = []
+    }
+    state['comments'].push(comment)
   }
 }
 
 export default {
   state,
-  getters,
-  mutations,
-  actions
+  actions,
+  mutations
 }

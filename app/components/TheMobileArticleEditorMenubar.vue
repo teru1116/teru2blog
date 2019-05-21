@@ -131,7 +131,7 @@ export default {
       showsIcatchImageModal: false,
       showsCategoryModal: false,
       command: null,
-      defaultImageDataURL: this.$store.state.admin.article.displayingArticle.icatchImageDataURL
+      defaultImageDataURL: this.$store.state.admin.editingArticle.iCatchImageDataURL
     }
   },
   methods: {

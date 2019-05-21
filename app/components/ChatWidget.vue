@@ -14,7 +14,7 @@
         :style="{ height: `${messageViewHeight}px` }"
       >
         <ol>
-          <li v-for="(element, index) in message.messages" :key="index">
+          <li v-for="(element, index) in messages" :key="index">
             <MessageItem
               :message="element"
             />
@@ -55,10 +55,10 @@ export default {
     AutogrowTextarea
   },
   computed: {
-    ...mapState([
-      'user',
-      'message'
-    ]),
+    ...mapState({
+      messages: state => state.messages,
+      me: state => state.me
+    }),
     messageViewHeight () {
       return widgetBodyDefaultHeight - this.footerHeight
     }
@@ -71,23 +71,27 @@ export default {
     }
   },
   watch: {
-    user: {
-      handler (newUser) {
+    me: {
+      handler (newVal) {
         // ストアのユーザー情報が更新されたら、メッセージのリッスンを開始する
-        this.$store.dispatch('message/listenAllMessages', newUser.uid)
+        this.$store.dispatch('messages/listenMessages', newVal.uid)
       },
       deep: true
     }
   },
   methods: {
-    onClickSendButton () {
-      const roomId = this.user.uid
+    async onClickSendButton () {
+      const uid = this.me.uid
+      const roomId = uid
       const message = {
         id: v4(),
-        uid: this.user.uid,
+        uid,
         text: this.inputMessageText
       }
-      this.$store.dispatch('message/addAndSendMessage', { roomId, message })
+      await this.$store.dispatch('messages/sendMessage', { roomId, message }).catch(e => {
+        window.alert('メッセージの送信に失敗しました。')
+        console.error(e)
+      })
       this.inputMessageText = ''
     },
     onChangeTextareaHeight (newVal) {

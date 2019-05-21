@@ -18,11 +18,11 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      categories: state => state.category.categories
+      categories: state => state.categories
     })
   },
   created () {
-    this.$store.dispatch('category/fetchAllCategory')
+    this.$store.dispatch('categories/fetchCategories')
   }
 }
 </script>

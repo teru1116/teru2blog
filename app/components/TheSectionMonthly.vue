@@ -18,11 +18,11 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      months: state => state.monthly.months
+      months: state => state.months
     })
   },
   created () {
-    this.$store.dispatch('monthly/fetchAllMonth')
+    this.$store.dispatch('months/fetchMonths')
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <li>
     <nuxt-link :to="$route.params.roomId ? `${room.id}` : `rooms/${room.id}`">
       <time>{{ dateString }}</time>
-      <p>{{ room.lastMessageText }}</p>
+      <p>{{ room.lastMessage.text }}</p>
     </nuxt-link>
   </li>
 </template>
@@ -10,18 +10,12 @@
 <script>
 export default {
   props: {
-    room: {
-      type: Object,
-      default: {
-        id: '',
-        lastMessageText: '',
-        lastMessageDate: new Date()
-      }
-    }
+    room: Object
   },
   computed: {
     dateString () {
-      const lastMessageDate = this.room.lastMessageDate
+      const lastMessageDate = this.room.lastMessage.createdDate
+      if (!lastMessageDate) return ''
 
       const weekdays = ['日', '月', '火', '水', '木', '金', '土']
       let minutes = lastMessageDate.getMinutes()
@@ -29,9 +23,7 @@ export default {
         minutes = `0${minutes}`
       }
       
-      return lastMessageDate
-        ? `${lastMessageDate.getFullYear()}.${lastMessageDate.getMonth() + 1}.${lastMessageDate.getDate()}(${weekdays[lastMessageDate.getDay()]}) ${lastMessageDate.getHours()}:${minutes}`
-        : null
+      return `${lastMessageDate.getFullYear()}.${lastMessageDate.getMonth() + 1}.${lastMessageDate.getDate()}(${weekdays[lastMessageDate.getDay()]}) ${lastMessageDate.getHours()}:${minutes}`
     }
   }
 }

@@ -31,12 +31,12 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: state => state.category.articles
+      articles: state => state.categoryArticles
     })
   },
   methods: {
     fetchArticles () {
-      this.$store.dispatch('category/fetchArticles', this.$route.params.categoryName)
+      this.$store.dispatch('categoryArticles/fetchCategoryArticles', this.$route.params.categoryName)
     }
   },
   created () {

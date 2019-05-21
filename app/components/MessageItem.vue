@@ -5,7 +5,7 @@
   >
     <!-- サムネイル -->
     <div v-if="!isMine">
-      <div/>
+      <div />
       <small>{{ message.userName }}</small>
     </div>
     <!-- 吹き出し -->
@@ -13,7 +13,7 @@
       <p>{{ message.text }}</p>
     </div>
     <!-- 送信時間 -->
-    <time v-if="message.status === 'sent' && message.createdDate">{{ messageTime }}</time>
+    <time v-if="message.createdDate">{{ messageTime }}</time>
   </div>
 </template>
 
@@ -26,20 +26,15 @@ export default {
     isMine () {
       return this.$route.name === 'admin-rooms-roomId'
         ? this.message.uid === 'admin'
-        : this.message.uid === this.$store.state.user.uid
+        : this.message.uid === this.$store.state.me.uid
     },
     messageTime () {
       const createdDate = this.message.createdDate
-      let minutes = this.message.createdDate.getMinutes()
+      let minutes = createdDate.getMinutes()
       if (minutes < 10) {
         minutes = `0${minutes}`
       }
       return createdDate ? `${this.message.createdDate.getHours()}:${minutes}` : ''
-    }
-  },
-  data () {
-    return {
-      //
     }
   }
 }

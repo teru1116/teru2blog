@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: state => state.monthly.articles
+      articles: state => state.monthlyArticles
     }),
     year () {
       return Number(this.$route.params.month.substr(0, 4))
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     fetchArticles () {
-      this.$store.dispatch('monthly/fetchArticles', { year: this.year, month: this.month })
+      this.$store.dispatch('monthlyArticles/fetchMonthlyArticles', { year: this.year, month: this.month })
     }
   },
   created () {

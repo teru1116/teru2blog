@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages () { return this.$store.state.admin.message.messages }
+      messages: state => state.admin.messages
     })
   },
   data () {
@@ -54,7 +54,7 @@ export default {
         uid: 'admin',
         text: this.inputMessageText
       }
-      this.$store.dispatch('admin/message/addAndSendMessage', { roomId, message })
+      this.$store.dispatch('admin/messages/sendMessage', { roomId, message })
       this.inputMessageText = ''
     },
     onChangeTextareaHeight (newVal) {
@@ -62,10 +62,10 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('admin/message/listenAllMessages', this.$route.params.roomId)
+    this.$store.dispatch('admin/messages/listenMessages', this.$route.params.roomId)
   },
   destroyed () {
-    this.$store.dispatch('admin/message/unlistenAllMessages', this.$route.params.roomId)
+    this.$store.dispatch('admin/messages/unlistenMessages', this.$route.params.roomId)
   }
 }
 </script>

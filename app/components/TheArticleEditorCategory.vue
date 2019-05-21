@@ -9,20 +9,20 @@
     <h4>選択中のカテゴリー</h4>
     <ul class="category-list-selected">
       <li
-        v-for="(categoryName, index) in selectedCategories"
+        v-for="(categoryName, index) in categories"
         :key="index" 
         class="category"
       >
         <p>{{ categoryName }}</p>
-        <button class="remove" @click="$store.dispatch('admin/article/deselectCategory', categoryName)">×</button>
+        <button class="remove" @click="$store.dispatch('admin/editingArticle/deselectCategory', categoryName)">×</button>
       </li>
     </ul>
     <h4>選択できるカテゴリー</h4>
-    <ul v-if="registeredCategories.length > 0" class="category-options">
+    <ul v-if="selectableCategories.length > 0" class="category-options">
       <li
-        v-for="(categoryName, index) in registeredCategories"
+        v-for="(categoryName, index) in selectableCategories"
         :key="index"
-        @click="$store.dispatch('admin/article/selectCategory', categoryName)"
+        @click="$store.dispatch('admin/editingArticle/selectCategory', categoryName)"
       >
         {{ categoryName }}
       </li>
@@ -31,11 +31,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   computed: {
-    selectedCategories () { return this.$store.state.admin.article.displayingArticle.selectedCategories },
-    registeredCategories () { return this.$store.state.admin.article.registeredCategories },
-    unregisteredCategories () { return this.$store.state.admin.article.displayingArticle.unregisteredCategories }
+    ...mapState({
+      categories: state => state.admin.editingArticle.categories,
+      newCategories: state => state.admin.editingArticle.newCategories,
+      selectableCategories: state => state.admin.editingArticle.selectableCategories
+    })
   },
   data () {
     return {
@@ -46,20 +50,20 @@ export default {
     onBlurCategoryInput () {
       if (this.inputCategoryName.length === 0) return
 
-      const alreadySelected = this.selectedCategories.includes(this.inputCategoryName)
-      const alreadyRegistered = this.registeredCategories.includes(this.inputCategoryName)
+      const alreadySelected = this.categories.includes(this.inputCategoryName)
+      const alreadyRegistered = this.selectableCategories.includes(this.inputCategoryName)
 
       alreadySelected
         ? this.categoryError = 'すでに追加されています。'
         : alreadyRegistered
-          ? this.$store.dispatch('admin/article/selectCategory', this.inputCategoryName)
-          : this.$store.dispatch('admin/article/addCategory', this.inputCategoryName)
+          ? this.$store.dispatch('admin/editingArticle/selectCategory', this.inputCategoryName)
+          : this.$store.dispatch('admin/editingArticle/addCategory', this.inputCategoryName)
 
       this.inputCategoryName = ''
     }
   },
   created () {
-    this.$store.dispatch('admin/article/fetchCategories')
+    this.$store.dispatch('admin/editingArticle/fetchExistingCategories')
   }
 }
 </script>
@@ -67,7 +71,6 @@ export default {
 <style lang="scss" scoped>
 section {
   margin-bottom: 24px;
-  h3 {}
   h4 {
     padding: 8px 0;
     font-size: 14px;

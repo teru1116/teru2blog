@@ -30,11 +30,11 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: state => state.admin.article.articles
+      articles: state => state.admin.articles
     })
   },
   created () {
-    this.$store.dispatch('admin/article/fetchAllArticles')
+    this.$store.dispatch('admin/articles/fetchArticles')
     this.$store.dispatch('admin/article/onExitArticle')
   },
   methods: {

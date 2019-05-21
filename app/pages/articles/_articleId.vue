@@ -1,15 +1,15 @@
 <template>
   <div class="inner columns-wrapper">
     <article>
-      <ArticleContent class="article-body" />
+      <ArticleContent class="article-body" :article="article" />
       <!-- コメント一覧 -->
       <section class="comment-list">
         <h3>コメント</h3>
-        <CommentListItem v-for="(comment, index) in comments" :key="index" :comment="comment" />
+        <CommentListItem v-for="(comment, index) in article.comments" :key="index" :comment="comment" />
       </section>
       <!-- コメント投稿 -->
       <section class="input-comment">
-        <CommentEditor v-on:onCommentPost="fetchComments" />
+        <CommentEditor v-on:onCommentPost="$store.dispatch('article/fetchComments')" />
       </section>
     </article>
     <aside>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ArticleContent from './../../components/TheArticleContent'
 import CommentListItem from './../../components/ArticleCommentListItem'
 import CommentEditor from './../../components/TheCommentEditor'
@@ -34,25 +35,14 @@ export default {
     SectionCategory,
     SectionMonthly
   },
-  data () {
-    return {
-      comments: []
-    }
-  },
-  methods: {
-    async fetchComments () {
-      const db = this.$firebase.firestore()
-      const articleId = this.$route.params.articleId
-      const snapshot = await db.collection('articles').doc(articleId).collection('comments').orderBy('createdDate').get()
-      this.comments = []
-      snapshot.forEach(doc => {
-        const comment = Object.assign({ id: doc.id }, doc.data())
-        this.comments.push(comment)
-      })
-    }
+  computed: {
+    ...mapState({
+      article: state => state.article
+    })
   },
   created () {
-    this.fetchComments()
+    this.$store.dispatch('article/fetchArticle', this.$route.params.articleId)
+    this.$store.dispatch('article/fetchComments', this.$route.params.articleId)
   },
   layout: 'site'
 }
