@@ -15,6 +15,9 @@ export default {
   components: {
     EditorHeader,
     Editor
+  },
+  created () {
+    this.$store.dispatch('admin/editingArticle/initializeEditingArticle')
   }
 }
 </script>
