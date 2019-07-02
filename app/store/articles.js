@@ -8,7 +8,7 @@ const state = () => {
 const actions = {
   async fetchArticles ({ commit }) {
     commit('clearState')
-    const snapshot = await db.collection('articles').get()
+    const snapshot = await db.collection('articles').orderBy('createdDate', 'desc').get()
     snapshot.forEach(doc => {
       const article = Object.assign({ id: doc.id }, doc.data())
       commit('addArticle', article)
