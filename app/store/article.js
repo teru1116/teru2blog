@@ -12,19 +12,24 @@ const state = () => ({
 })
 
 const actions = {
-  async fetchArticle ({ commit }, articleId) {
+  async fetchArticle ({ dispatch, commit }, articleId) {
     const doc = await db.collection('articles').doc(articleId).get()
     const article = Object.assign({ id: doc.id }, doc.data())
     article.createdDate = doc.data().createdDate.toDate()
     commit('setArticle', article)
+
+    // 記事の読み込み完了を待ってからコメントを読み込む
+    dispatch('fetchComments', articleId)
   },
 
   async fetchComments ({ commit }, articleId) {
+    const comments = []
     const snapshot = await db.collection('articles').doc(articleId).collection('comments').orderBy('createdDate').get()
     snapshot.forEach(doc => {
       const comment = Object.assign({ id: doc.id }, doc.data())
-      commit('addComment', comment)
+      comments.push(comment)
     })
+    commit('setComments', comments)
   },
 
   async postComment ({ commit }, { articleId, comment }) {
@@ -41,6 +46,10 @@ const actions = {
 const mutations = {
   setArticle (state, article) {
     state = Object.assign(state, article)
+  },
+
+  setComments (state, comments) {
+    state.comments = comments
   },
 
   addComment (state, comment) {

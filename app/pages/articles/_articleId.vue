@@ -42,7 +42,6 @@ export default {
   },
   created () {
     this.$store.dispatch('article/fetchArticle', this.$route.params.articleId)
-    this.$store.dispatch('article/fetchComments', this.$route.params.articleId)
   },
   layout: 'site'
 }
