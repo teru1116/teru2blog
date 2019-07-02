@@ -93,24 +93,23 @@ export default {
       this.editor.focus()
     },
     async postComment () {
-      const firebase = this.$firebase
-      const db = firebase.firestore()
-
+      const articleId = this.$route.params.articleId
+      const comment = {
+        uid: this.$firebase.auth().currentUser.uid,
+        username: this.username,
+        contentHTML: this.commentHTML,
+      }
+      
       try {
-        await db.collection('articles').doc(this.$route.params.articleId).collection('comments').add({
-          uid: firebase.auth().currentUser.uid,
-          username: this.username,
-          contentHTML: this.commentHTML,
-          createdDate: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        this.editor.clearContent()
-        this.username = ''
-        this.commentHTML = ''
-        this.$emit('onCommentPost')
+        await this.$store.dispatch('article/postComment', { articleId, comment })
       } catch (e) {
         console.error(e)
         this.errorMessage = 'コメントの投稿に失敗しました。'
       }
+
+      this.editor.clearContent()
+      this.username = ''
+      this.commentHTML = ''
     }
   }
 }

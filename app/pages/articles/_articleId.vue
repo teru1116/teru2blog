@@ -9,7 +9,7 @@
       </section>
       <!-- コメント投稿 -->
       <section class="input-comment">
-        <CommentEditor v-on:onCommentPost="$store.dispatch('article/fetchComments')" />
+        <CommentEditor />
       </section>
     </article>
     <aside>

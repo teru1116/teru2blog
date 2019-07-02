@@ -1,3 +1,4 @@
+import v4 from 'uuid/v4'
 import firebase from '@@/app/plugins/firebase'
 const db = firebase.firestore()
 
@@ -33,13 +34,17 @@ const actions = {
   },
 
   async postComment ({ commit }, { articleId, comment }) {
-    const commentId = comment.id
+    const commentId = v4()
     comment['createdDate'] = firebase.firestore.FieldValue.serverTimestamp()
-    await db.collection('articles').doc(articleId).collection('comments').doc(commentId).set(comment)
 
-    const doc = await db.collection('articles').doc(articleId).collection('comments').doc(commentId).get()
-    const newComment = Object.assign({ id: doc.id }, doc.data())
-    commit('addComment', newComment)
+    try {
+      await db.collection('articles').doc(articleId).collection('comments').doc(commentId).set(comment)
+      const doc = await db.collection('articles').doc(articleId).collection('comments').doc(commentId).get()
+      const newComment = Object.assign({ id: doc.id }, doc.data())
+      commit('addComment', newComment)
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }
 
@@ -53,10 +58,7 @@ const mutations = {
   },
 
   addComment (state, comment) {
-    if (!state['comments']) {
-      state['comments'] = []
-    }
-    state['comments'].push(comment)
+    state.comments.push(comment)
   }
 }
 
