@@ -2,7 +2,7 @@
   <div>
     <EditorHeader />
     <main>
-      <Editor :title="title" :contentHTML="contentHTML" />
+      <Editor :title="title" :contentHTML="contentHTML" ref="editor" />
     </main>
   </div>
 </template>
@@ -23,8 +23,15 @@ export default {
       contentHTML: state => state.admin.editingArticle.contentHTML
     })
   },
+  methods: {
+    async fetchArticle () {
+      await this.$store.dispatch('admin/editingArticle/fetchArticle', this.$route.params.articleId)
+      // 記事の読み込みが完了したら、エディタにコンテンツを渡す
+      this.$refs.editor.setContent()
+    }
+  },
   created () {
-    this.$store.dispatch('admin/editingArticle/fetchArticle', this.$route.params.articleId)
+    this.fetchArticle()
   }
 }
 </script>

@@ -58,11 +58,6 @@ export default {
       })
     }
   },
-  watch: {
-    contentHTML (newVal) {
-      this.editor.setContent(newVal)
-    }
-  },
   methods: {
     onTitleUpdate (e) {
       const title = e.target.value
@@ -70,6 +65,9 @@ export default {
     },
     onContentUpdate (contentHTML) {
       this.$store.dispatch('admin/editingArticle/updateContentHTML', contentHTML)
+    },
+    setContent () {
+      this.editor.setContent(this.contentHTML)
     }
   },
   beforeDestroy() {
