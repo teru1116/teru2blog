@@ -9,6 +9,7 @@ const state = () => {
 
 const actions = {
   listenMessages ({ commit }, roomId) {
+    if (!roomId) return
     listenStartTime = new Date()
     db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
@@ -53,6 +54,7 @@ const actions = {
   },
 
   unlistenMessages ({ commit }, roomId) {
+    if (!roomId) return
     const unsubscribe = db.collection('rooms').doc(roomId).collection('messages').onSnapshot(() => {})
     unsubscribe()
   },
