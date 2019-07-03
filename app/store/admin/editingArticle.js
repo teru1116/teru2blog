@@ -17,6 +17,7 @@ const state = () => ({
 
 const actions = {
   initializeEditingArticle ({ commit }) {
+    commit('clearState')
     const articleId = v4()
     commit('setArticleId', articleId)
   },
@@ -82,17 +83,19 @@ const actions = {
   },
 
   async saveArticle ({ state }) {
-    const article = state
+    const article = Object.assign({}, state)
     delete article.newCategories
     delete article.selectableCategories
     article.createdDate = firebase.firestore.FieldValue.serverTimestamp()
     article.isPublished = false
+    
     await db.collection('articles').doc(article.id).set(article)
   },
 
   async fetchArticle ({ commit }, articleId) {
     const doc = await db.collection('articles').doc(articleId).get()
     const article = Object.assign({ id: doc.id }, doc.data())
+    article.createdDate = doc.data().createdDate.toDate()
     commit('setArticle', article)
   }
 }
@@ -144,6 +147,21 @@ const mutations = {
 
   setArticle (state, article) {
     state = Object.assign(state, article)
+  },
+
+  clearState (state) {
+    state = Object.assign(state, {
+      id: '',
+      title: '',
+      contentHTML: '',
+      iCatchImageDataURL: '',
+      createdDate: null,
+      isPublished: false,
+      isTestData: false,
+      categories: [],
+      newCategories: [],
+      selectableCategories: []
+    })
   }
 }
 
