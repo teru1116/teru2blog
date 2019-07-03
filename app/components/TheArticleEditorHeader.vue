@@ -31,17 +31,12 @@
         </nav>
       </div>
     </div>
-    <md-snackbar :md-position="'center'" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
-      <span>Connection timeout. Showing limited messages!</span>
-    </md-snackbar>
+    <v-snackbar v-model="showSnackbar" :timeout="4000">{{ snackbarMessage }}</v-snackbar>
   </header>
 </template>
 
 <script>
 export default {
-  // components: {
-  //   MdSnackbar
-  // },
   computed: {
     showsPreviewButton () {
       return this.$route.name === 'admin-articles-new' || this.$route.name === 'admin-articles-articleId-edit'
@@ -67,18 +62,46 @@ export default {
   },
   data () {
     return {
-      showSnackbar: false
+      showSnackbar: false,
+      snackbarMessage: ''
     }
   },
   methods: {
-    onSaveButtonClick () {
-      this.$store.dispatch('admin/editingArticle/saveArticle', { isTestData: false })
+    async onSaveButtonClick () {
+      try {
+        await this.$store.dispatch('admin/editingArticle/saveArticle', { isTestData: false })
+        this.snackbarMessage = '下書き保存しました'
+      } catch (e) {
+        this.snackbarMessage = '下書き保存できませんでした'
+        console.error(e)
+      } finally {
+        this.showSnackbar = true
+      }
     },
-    onDeleteButtonClick () {
-      this.$store.dispatch('admin/editingArticle/deleteArticle')
+    async onDeleteButtonClick () {
+      const result = window.confirm('記事を削除します。よろしいですか？')
+      if (!result) return
+
+      try {
+        await this.$store.dispatch('admin/editingArticle/deleteArticle')
+        this.snackbarMessage = '記事を削除しました'
+      } catch (e) {
+        this.snackbarMessage = '記事を削除できませんでした'
+        console.error(e)
+      } finally {
+        this.showSnackbar = true
+      }
     },
-    onPostButtonClick () {
-      this.$store.dispatch('admin/editingArticle/postArticle', { isTestData: false })
+    async onPostButtonClick () {
+      try {
+        await this.$store.dispatch('admin/editingArticle/postArticle', { isTestData: false })
+        this.snackbarMessage = '記事を公開しました'
+      } catch (e) {
+        this.snackbarMessage = '記事を更新できませんでした'
+        console.error(e)
+      } finally {
+        this.showSnackbar = true
+      }
     }
   }
 }
@@ -96,7 +119,6 @@ header {
     left: 0;
   }
   .inner {
-    .header-left-wrapper {}
     .header-right-wrapper {
       nav {
         ul {
@@ -107,7 +129,7 @@ header {
             }
             button.submit {
               color: #fff;
-              padding: 2px 8px;
+              padding: 4px 8px;
             }
           }
         }
