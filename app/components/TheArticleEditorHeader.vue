@@ -83,13 +83,12 @@ export default {
       if (!result) return
 
       try {
-        await this.$store.dispatch('admin/editingArticle/deleteArticle')
-        this.snackbarMessage = '記事を削除しました'
+        await this.$store.dispatch('admin/article/deleteArticle', this.$route.params.articleId)
+        this.$router.push('/admin/articles')
       } catch (e) {
+        this.showSnackbar = true
         this.snackbarMessage = '記事を削除できませんでした'
         console.error(e)
-      } finally {
-        this.showSnackbar = true
       }
     },
     async onPostButtonClick () {

@@ -28,6 +28,15 @@ const actions = {
     })
   },
 
+  async deleteArticle ({ commit }, articleId) {
+    try {
+      await db.collection('articles').doc(articleId).delete()
+      commit('clearState')
+    } catch (e) {
+      throw new Error(e)
+    }
+  },
+
   onExitArticle ({ commit }) {
     commit('clearState')
   }
@@ -46,7 +55,15 @@ const mutations = {
   },
 
   clearState (state) {
-    state = Object.assign(state, {})
+    state = Object.assign(state, {
+      title: '',
+      contentHTML: '',
+      categories: [],
+      createdDate: null,
+      isPublished: false,
+      isTestData: false,
+      comments: []
+    })
   }
 }
 
