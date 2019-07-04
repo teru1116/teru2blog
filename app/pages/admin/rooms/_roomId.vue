@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapState({
-      messages: state => state.admin.messages
+      messages: state => state.admin.messages.messages
     })
   },
   data () {
@@ -61,11 +61,21 @@ export default {
       this.footerHeight = newVal + 18
     }
   },
+  watch: {
+    '$route.params.roomId': {
+      handler (newRoomId) {
+        this.$store.dispatch('admin/messages/unlistenMessages')
+        this.$store.dispatch('admin/messages/clearState')
+        this.$store.dispatch('admin/messages/listenMessages', newRoomId)
+      }
+    }
+  },
   created () {
     this.$store.dispatch('admin/messages/listenMessages', this.$route.params.roomId)
   },
-  destroyed () {
-    this.$store.dispatch('admin/messages/unlistenMessages', this.$route.params.roomId)
+  beforeDestroy () {
+    this.$store.dispatch('admin/messages/unlistenMessages')
+    this.$store.dispatch('admin/messages/clearState')
   }
 }
 </script>

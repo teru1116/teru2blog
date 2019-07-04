@@ -4,16 +4,22 @@ const db = firebase.firestore()
 let listenStartTime
 
 const state = () => {
-  return []
+  return {
+    roomId: '',
+    messages: [],
+    unsubscribe: null // リッスン開始時に返される、リスナーをデタッチする関数
+  }
 }
 
 const actions = {
   listenMessages ({ commit }, roomId) {
     if (!roomId) return
+
     listenStartTime = new Date()
-    db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
+    const unsubscribe = db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
+          console.log(change)
           const message = Object.assign({ id: change.doc.id }, change.doc.data())
 
           // リモートの変更であれば、DBのcreatedDateにサーバ時間がセットされているので、messageにセットする
@@ -29,6 +35,8 @@ const actions = {
           }
         })
       })
+
+      commit('setUnsubscribe', unsubscribe)
   },
 
   async sendMessage ({ commit }, { roomId, message }) {
@@ -53,10 +61,8 @@ const actions = {
     await batch.commit()
   },
 
-  unlistenMessages ({ commit }, roomId) {
-    if (!roomId) return
-    const unsubscribe = db.collection('rooms').doc(roomId).collection('messages').onSnapshot(() => {})
-    unsubscribe()
+  unlistenMessages ({ state }) {
+    state.unsubscribe()
   },
 
   clearState ({ commit }) {
@@ -66,22 +72,28 @@ const actions = {
 
 const mutations = {
   addMessage (state, message) {
-    state.push(message)
+    state.messages.push(message)
   },
 
   updateMessage (state, message) {
+    const messages = state.messages
     // 更新対象のmessageをストア中の最新から順に線形探索
-    for (let index = state.length - 1; index >= 0; index--) {
-      let currentMessage = state[index]
+    for (let index = messages.length - 1; index >= 0; index--) {
+      let currentMessage = messages[index]
       if (currentMessage.id === message.id) {
-        state.splice(index, 1, message)
+        state.messages.splice(index, 1, message)
         break
       }
     }
   },
 
+  setUnsubscribe (state, unsubscribe) {
+    state.unsubscribe = unsubscribe
+  },
+
   clearState (state) {
-    state.splice(0, state.length)
+    state.messages.splice(0, state.messages.length)
+    state.unsubscribe = null
   }
 }
 
