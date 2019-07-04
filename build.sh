@@ -5,3 +5,5 @@ if [ ${TRAVIS_BRANCH} == master ]; then
 else
   yarn build
 fi
+
+nvm use 8.1.0
