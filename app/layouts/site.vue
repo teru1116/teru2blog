@@ -5,7 +5,7 @@
         <div class="header-left-wrapper">
           <h1>
             <nuxt-link to="/">
-              <i class="material-icons">create</i>Blog Title
+              プロジェクトマネジメントBlog
             </nuxt-link>
           </h1>
         </div>
@@ -46,7 +46,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss" scoped>
 header.page-header {
   background-color: #000;
@@ -59,6 +58,12 @@ header.page-header {
           color: #fff;
           display: flex;
           align-items: center;
+          @media screen and (min-width: 600px) {
+            font-size: 20px;
+          }
+          @media screen and (max-width: 599px) {
+            font-size: 15px;
+          }
         }
         i {
           font-size: 28px;
