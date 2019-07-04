@@ -8,6 +8,7 @@
           <small>最新記事</small>
           <hr class="gradation" />
         </h2>
+        <clip-loader :loading="isLoading" :color="'#0052A3'" :style="{ marginTop: '40px' }" />
         <ol>
           <ArticleListItem
             v-for="(article, index) in articles"
@@ -25,21 +26,28 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ArticleListItem from './../components/ArticleListItem'
 import SectionCategory from './../components/TheSectionCategory'
 import SectionMonthly from './../components/TheSectionMonthly'
-import { mapState } from 'vuex'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 export default {
   components: {
     ArticleListItem,
     SectionCategory,
-    SectionMonthly
+    SectionMonthly,
+    ClipLoader
   },
   computed: {
     ...mapState({
       articles: state => state.articles
     })
+  },
+  data () {
+    return {
+      isLoading: false
+    }
   },
   async created () {
     // ブラウザ識別
@@ -47,7 +55,9 @@ export default {
     this.$store.dispatch('me/setMe', userCredential)
 
     // 記事取得
-    this.$store.dispatch('articles/fetchArticles')
+    this.isLoading = true
+    await this.$store.dispatch('articles/fetchArticles')
+    this.isLoading = false
   },
   layout: 'site'
 }

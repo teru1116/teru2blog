@@ -4,6 +4,7 @@
       カテゴリー
       <hr class="gradation" />
     </h2>
+    <clip-loader :loading="isLoading" :color="'#0052A3'" :style="{ marginTop: '24px' }" />
     <ul>
       <li v-for="(categoryName, index) in categories" :key="index">
         <nuxt-link :to="`/categories/${categoryName}`">{{ categoryName }}</nuxt-link>
@@ -14,15 +15,26 @@
 
 <script>
 import { mapState } from 'vuex'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 export default {
+  components: {
+    ClipLoader
+  },
   computed: {
     ...mapState({
       categories: state => state.categories
     })
   },
-  created () {
-    this.$store.dispatch('categories/fetchCategories')
+  data () {
+    return {
+      isLoading: false
+    }
+  },
+  async created () {
+    this.isLoading = true
+    await this.$store.dispatch('categories/fetchCategories')
+    this.isLoading = false
   }
 }
 </script>
