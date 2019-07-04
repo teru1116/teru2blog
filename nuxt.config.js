@@ -3,14 +3,6 @@ import pkg from './package'
 export default {
   mode: 'spa',
   srcDir: 'app',
-  env: {
-    firebaseApiKey: process.env.FIREBASE_API_KEY || 'AIzaSyBmQDrA-OZtpbf-SItU9KvToOpBXOUgYng',
-    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN || 'teru2blog-staging.firebaseapp.com',
-    firebaseDatabaseURL: process.env.FIREBASE_DATABASE_URL || 'https://teru2blog-staging.firebaseio.com',
-    firebaseProjectId: process.env.FIREBASE_PROJECT_ID || 'teru2blog-staging',
-    firebaseStorageBucket: process.env.STORAGE_BUCKET || 'teru2blog-staging.appspot.com',
-    firebaseMessagingSenderId: process.env.MESSAGING_SENDER_ID || '634375775324'
-  },
 
   /*
   ** Headers of the page
