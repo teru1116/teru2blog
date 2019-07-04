@@ -1,11 +1,9 @@
 import firebase from '@@/app/plugins/firebase'
 
 const db = firebase.firestore()
-let listenStartTime
 
 const state = () => {
   return {
-    roomId: '',
     messages: [],
     unsubscribe: null // リッスン開始時に返される、リスナーをデタッチする関数
   }
@@ -15,11 +13,9 @@ const actions = {
   listenMessages ({ commit }, roomId) {
     if (!roomId) return
 
-    listenStartTime = new Date()
     const unsubscribe = db.collection('rooms').doc(roomId).collection('messages').orderBy('createdDate')
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
-          console.log(change)
           const message = Object.assign({ id: change.doc.id }, change.doc.data())
 
           // リモートの変更であれば、DBのcreatedDateにサーバ時間がセットされているので、messageにセットする
