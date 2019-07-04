@@ -107,6 +107,7 @@ export default {
     border-top: 1px solid #e6e6e6;
     padding: 8px 8px;
     background-color: #fff;
+    box-sizing: initial;
     .textbox-wrapper {
       flex: 1;
       textarea {

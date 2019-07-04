@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="article-content">
     <header class="article-header">
       <div class="article-metadata">
         <ul class="category-list">
@@ -32,39 +32,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.article-header {
-  margin: 30px 0 35px;
-  .article-metadata {
-    display: flex;
-    ul {
+.article-content {
+  padding: 0 0 60px;
+  .article-header {
+    margin: 30px 0 35px;
+    .article-metadata {
       display: flex;
-      li {
-        margin-right: 4px;
-        a {
-          color: #0052A3;
-          font-size: 15px;
-        }
-        &:after {
-          content: ",";
-        }
-        &:last-child {
+      ul {
+        display: flex;
+        li {
+          margin-right: 4px;
+          a {
+            color: #0052A3;
+            font-size: 15px;
+          }
           &:after {
-            content: "  |  ";
+            content: ",";
+          }
+          &:last-child {
+            &:after {
+              content: "  |  ";
+            }
           }
         }
       }
     }
-  }
-  h2 {
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 45.46px;
-    letter-spacing: 2.1px;
-    hr {
-      background-color: #0070c9;
-      background: linear-gradient(#42a1ec, #0070c9);
-      height: 2px;
-      border: 0;
+    h2 {
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 45.46px;
+      letter-spacing: 2.1px;
+      hr {
+        background-color: #0070c9;
+        background: linear-gradient(#42a1ec, #0070c9);
+        height: 2px;
+        border: 0;
+      }
     }
   }
 }

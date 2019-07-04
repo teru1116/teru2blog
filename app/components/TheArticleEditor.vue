@@ -78,6 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .article-editor {
+  padding: 0 0 60px;
   @media screen and (min-width: 600px) {
     display: flex;
     margin-top: 32px;

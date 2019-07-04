@@ -107,6 +107,7 @@ export default {
   bottom: -367px;
   background-color: #fff;
   border-color: #0052A3;
+  box-sizing: initial;
   &.isExpanded {
     bottom: 0;
   }
