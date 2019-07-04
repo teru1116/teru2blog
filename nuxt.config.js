@@ -39,13 +39,13 @@ export default {
   */
   plugins: [
     { src: '~/plugins/firebase.js', ssr: false },
-    { src: '~/plugins/isMobile.js', ssr: false },
-    { src: '~/plugins/VueMaterial.js', ssr: false }
+    { src: '~/plugins/isMobile.js', ssr: false }
   ],
 
   router: {
     middleware: [
-      'authAdmin'
+      'authAdmin',
+      'initEditingArticle'
     ]
   },
 

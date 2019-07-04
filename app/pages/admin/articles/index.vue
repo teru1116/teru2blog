@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     onCreateButtonClick () {
-      this.$store.dispatch('admin/article/refleshArticleId')
       this.$router.push('/admin/articles/new')
     }
   },
