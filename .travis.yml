@@ -10,6 +10,7 @@ branches:
 install:
   - yarn global add firebase-tools nuxt
   - yarn install
+  - nvm install 8.1.0
 script:
   - bash build.sh
   - nvm use 8.1.0
