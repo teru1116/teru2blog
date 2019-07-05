@@ -3,16 +3,16 @@ node_js:
   - stable
 dist: trusty
 sudo: false
-cache: yarn
 branches:
   only:
   - master
   - develop
 install:
   - yarn global add firebase-tools nuxt
-script:
   - yarn install
+script:
   - bash build.sh
+  - nvm use 8.1.0
 deploy:
   - provider: firebase
     skip_cleanup: true
