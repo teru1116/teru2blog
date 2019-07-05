@@ -15,7 +15,6 @@ install:
 script:
   - nvm use 11.11.0
   - bash build.sh
-  - nvm use 8.1.0
 deploy:
   provider: firebase
   skip_cleanup: true
