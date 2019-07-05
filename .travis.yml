@@ -17,17 +17,10 @@ script:
   - bash build.sh
   - nvm use 8.1.0
 deploy:
-  - provider: firebase
-    skip_cleanup: true
-    token:
-      secure: $FIREBASE_TOKEN
-    project: teru2blog
-    on:
-      branch: master
-  - provider: firebase
-    skip_cleanup: true
-    token:
-      secure: $FIREBASE_TOKEN
-    project: teru2blog-staging
-    on:
-      branch: develop
+  provider: firebase
+  skip_cleanup: true
+  token:
+    secure: $FIREBASE_TOKEN
+  project: teru2blog-staging
+  on:
+    all_branches: true
