@@ -13,7 +13,8 @@ install:
   - nvm install 11.11.0
 script:
   - nvm use 11.11.0
-  - yarn build
+  - bash build.sh
+  - ls -al
 deploy:
   provider: firebase
   skip_cleanup: true
