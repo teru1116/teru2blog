@@ -18,7 +18,7 @@ install:
 script:
   - nvm use 11.11.0
   - npm rebuild node-sass
-  - yarn build
+  - bash build.sh
   - ls -al
 deploy:
   provider: firebase

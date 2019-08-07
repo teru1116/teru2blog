@@ -80,6 +80,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
+    // $ nuxt build コマンドのエラーログを全部吐き出す. CIでdistディレクトリが生成されなくて苦しんだ経験から
     quiet: false,
     extend(config, ctx) {
       // Run ESLint on save
