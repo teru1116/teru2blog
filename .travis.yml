@@ -13,7 +13,7 @@ install:
   - nvm install 11.11.0
 script:
   - nvm use 11.11.0
-  - bash build.sh
+  - yarn build
   - ls -al
 deploy:
   provider: firebase
