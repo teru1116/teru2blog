@@ -17,7 +17,7 @@ install:
   - nvm install 11.11.0
 script:
   - nvm use 11.11.0
-  - yarn rebuild node-sass
+  - npm rebuild node-sass
   - yarn build
   - ls -al
 deploy:
