@@ -80,6 +80,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
+    quiet: false,
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
