@@ -1,16 +1,8 @@
 import pkg from './package'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   srcDir: 'app',
-  env: {
-    firebaseApiKey: process.env.FIREBASE_API_KEY || 'AIzaSyBmQDrA-OZtpbf-SItU9KvToOpBXOUgYng',
-    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN || 'teru2blog-staging.firebaseapp.com',
-    firebaseDatabaseURL: process.env.FIREBASE_DATABASE_URL || 'https://teru2blog-staging.firebaseio.com',
-    firebaseProjectId: process.env.FIREBASE_PROJECT_ID || 'teru2blog-staging',
-    firebaseStorageBucket: process.env.STORAGE_BUCKET || 'teru2blog-staging.appspot.com',
-    firebaseMessagingSenderId: process.env.MESSAGING_SENDER_ID || '634375775324'
-  },
 
   /*
   ** Headers of the page
@@ -23,7 +15,8 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' }
     ]
   },
 
@@ -36,27 +29,48 @@ export default {
   ** Global CSS
   */
   css: [
+    'reset-css',
+    '@/assets/sass/common.scss',
+    '@/assets/sass/wysiwyg.scss'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/firebase.js', ssr: false }
+    { src: '~/plugins/firebase.js', ssr: false },
+    { src: '~/plugins/isMobile.js', ssr: false }
   ],
+
+  router: {
+    middleware: [
+      'authAdmin',
+      'initEditingArticle'
+    ]
+  },
 
   /*
   ** Nuxt.js modules
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+  },
+
+  vuetify: {
+    theme: {
+      primary: '#3f51b5',
+      secondary: '#b0bec5',
+      accent: '#8c9eff',
+      error: '#b71c1c'
+    }
   },
 
   /*
@@ -72,7 +86,7 @@ export default {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
+          // loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
       }

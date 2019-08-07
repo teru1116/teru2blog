@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - 10.16.0
+dist: trusty
+sudo: false
+branches:
+  only:
+  - master
+  - develop
+install:
+  - yarn global add firebase-tools nuxt
+  - yarn install
+  - nvm install 11.11.0
+script:
+  - nvm use 11.11.0
+  - bash build.sh
+  - ls -al
+deploy:
+  provider: firebase
+  skip_cleanup: true
+  token:
+    secure: $FIREBASE_TOKEN
+  project: teru2blog-staging
+  on:
+    all_branches: true

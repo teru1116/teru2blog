@@ -1,25 +1,23 @@
 /*
-** Firebaseセットアップ処理群
+** Firebaseオブジェクト初期化処理
 */
 import Vue from 'vue'
 import firebase from 'firebase'
 
-export default context => {
-  firebase.initializeApp({
-    apiKey: process.env.firebaseApiKey,
-    authDomain: process.env.firebaseAuthDomain,
-    databaseURL: process.env.firebaseDatabaseURL,
-    projectId: process.env.firebaseProjectId,
-    storageBucket: process.env.firebaseStorageBucket,
-    messagingSenderId: process.env.firebaseMessagingSenderId
-  })
+const isProduction = process.env.NUXT_ENV_DESTINATION === 'production'
 
-  // 初期化後のFirebaseオブジェクトを、アプリケーション全体で利用できるようにする
-  Vue.prototype.$firebase = firebase
+firebase.initializeApp({
+  apiKey: isProduction ? 'AIzaSyBvLnw6ASN5kgutxLJa0g2RaaJ8IL0k4As' : 'AIzaSyBmQDrA-OZtpbf-SItU9KvToOpBXOUgYng',
+  authDomain: isProduction ? 'teru2blog.firebaseapp.com' :  'teru2blog-staging.firebaseapp.com',
+  databaseURL: isProduction ? 'https://teru2blog.firebaseio.com' :  'https://teru2blog-staging.firebaseio.com',
+  projectId: isProduction ? 'teru2blog' :  'teru2blog-staging',
+  storageBucket: isProduction ? 'teru2blog.appspot.com' :  'teru2blog-staging.appspot.com',
+  messagingSenderId: isProduction ? '257242725693' :  '634375775324',
+  appId: isProduction ? '1:257242725693:web:cc119b0235bae7cc' : '1:634375775324:web:3137e95683e15f8b'
+})
 
-  // 認証完了時の処理を登録
-  firebase.auth().onAuthStateChanged(user => {
-    // UserオブジェクトをVuexストアにセット
-    context.store.dispatch('user/updateUser', user)
-  })
-}
+// 初期化後のFirebaseオブジェクトを、全てのVueコンポーネントから利用できるようにする
+Vue.prototype.$firebase = firebase
+
+// Vueコンポーネント以外（VuexストアなどのJavaScriptファイル）からも利用できるように、exportする
+export default firebase

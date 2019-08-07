@@ -1,0 +1,77 @@
+.wysiwyg {
+  color: #444;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Hiragino Kaku Gothic ProN, "ヒラギノ角ゴ ProN W3", Arial, "メイリオ", Meiryo, sans-serif;
+  .ProseMirror {
+    outline: 0;
+  }
+
+  p {
+    line-height: 1.4;
+    @media screen and (min-width: 600px) {
+      font-size: 18px;
+      line-height: 36px;
+      min-height: 36px;
+    }
+    @media screen and (max-width: 599px) {
+      font-size: 16px;
+      line-height: 30px;
+      min-height: 30px;
+    }
+  }
+  
+  h1 {
+    @media screen and (min-width: 600px) {
+      font-size: 24px;
+      line-height: 1.75;
+      margin-top: 50px;
+      margin-bottom: 16px;
+      -webkit-font-feature-settings: 'palt' 1;
+      font-feature-settings: 'palt' 1;
+      letter-spacing: 0.04em;
+      font-weight: bold;
+    }
+    @media screen and (max-width: 599px) {
+      font-size: 20px;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      font-size: 24px;
+      line-height: 1.75;
+      -webkit-font-feature-settings: 'palt' 1;
+      font-feature-settings: 'palt' 1;
+      letter-spacing: 0.04em;
+      font-weight: bold;
+    }
+    &:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  blockquote {
+    font-size: 16px;
+    line-height: 36px;
+    margin: 36px 0;
+    padding: 25px 36px;
+    background-color: #f7f9f9;
+    color: #444;
+  }
+
+  img {
+    display: block;
+    margin: 20px 0;
+    @media screen and (min-width: 600px) {
+      width: 70%;
+    }
+    @media screen and (max-width: 599px) {
+      width: 100%;
+    }
+  }
+}

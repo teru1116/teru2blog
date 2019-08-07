@@ -1,71 +1,87 @@
 <template>
-  <section class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        teru2blog
-      </h1>
-      <h2 class="subtitle">
-        My blog website implemented in Nuxt.js and Firebase
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
+  <div>
+    <div class="inner columns-wrapper">
+      <!-- 最新記事 -->
+      <section id="article-list-recent">
+        <h2>
+          RECENT
+          <small>最新記事</small>
+          <hr class="gradation" />
+        </h2>
+        <clip-loader :loading="isLoading" :color="'#0052A3'" :style="{ marginTop: '40px' }" />
+        <ol>
+          <ArticleListItem
+            v-for="(article, index) in articles"
+            :key="index"
+            :article="article"
+          />
+        </ol>
+      </section>
+      <aside>
+        <SectionCategory />
+        <SectionMonthly />
+      </aside>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import { mapState } from 'vuex'
+import ArticleListItem from './../components/ArticleListItem'
+import SectionCategory from './../components/TheSectionCategory'
+import SectionMonthly from './../components/TheSectionMonthly'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 export default {
   components: {
-    Logo
+    ArticleListItem,
+    SectionCategory,
+    SectionMonthly,
+    ClipLoader
+  },
+  computed: {
+    ...mapState({
+      articles: state => state.articles
+    })
+  },
+  data () {
+    return {
+      isLoading: false
+    }
   },
   async created () {
-    await this.$firebase.auth().signInAnonymously()
-  }
+    // ブラウザ識別
+    const userCredential = await this.$firebase.auth().signInAnonymously()
+    this.$store.dispatch('me/setMe', userCredential)
+
+    // 記事取得
+    this.isLoading = true
+    await this.$store.dispatch('articles/fetchArticles')
+    this.isLoading = false
+  },
+  layout: 'site'
 }
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+<style lang="scss" scoped>
+.inner {
+  @media screen and (min-width: 600px) {
+    display: flex;
+  }
+  @media screen and (max-width: 599px) {}
+  section#article-list-recent {
+    @media screen and (min-width: 600px) {
+      flex: 1;
+    }
+    @media screen and (max-width: 599px) {}
+  }
 }
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+section {
+  @media screen and (min-width: 600px) {
+    margin-bottom: 48px;
+  }
+  @media screen and (max-width: 599px) {
+    margin-bottom: 60px;
+  }
 }
 </style>

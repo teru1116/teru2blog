@@ -1,0 +1,148 @@
+html {
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+.inner {
+  margin: 0 auto;
+  @media screen and (min-width: 600px) {
+    width: 1000px;
+  }
+  @media screen and (max-width: 599px) {
+    padding: 0 15px;
+  }
+}
+
+h2 {
+  color: #0052A3;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 24px 0 0;
+  @media screen and (min-width: 600px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 599px) {
+    font-size: 18px;
+  }
+  small {
+    font-size: 10px;
+  }
+  hr {
+    margin: 16px 0 0!important;
+  }
+}
+
+hr.gradation {
+  background: linear-gradient(90deg, #5AB9EA 0%, #1665ce 30.09%, #5AB9EA 70.44%, #84CEEB 100%);
+  height: 1px;
+  border: 0;
+  margin: 0;
+}
+
+.columns-wrapper {
+  @media screen and (min-width: 600px) {
+    display: flex;
+  }
+  aside {
+    @media screen and (min-width: 600px) {
+      width: 200px;
+      margin-left: 40px;
+      padding-top: 8px;
+    }
+    @media screen and (max-width: 599px) {}
+    h2 {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+button {
+  border: 0;
+  padding: 0;
+  outline: 0;
+  cursor: pointer;
+  background: none;
+  font: initial;
+}
+
+.submit {
+  background-color: #0070c9;
+  background: linear-gradient(#42a1ec,#0070c9);
+  color: #fff;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  min-width: 30px;
+  padding: 4px 16px;
+  font-size: 15px;
+}
+
+header.page-header {
+  height: 48px;
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    .header-left-wrapper {
+      h1 {
+        font-weight: 700; 
+        line-height: 48px;
+        @media screen and (min-width: 600px) {
+          font-size: 24px;
+        }
+        @media screen and (max-width: 599px) {
+          font-size: 18px;
+        }
+      }
+    }
+    .header-right-wrapper {
+      nav {
+        ul {
+          display: flex;
+          align-items: center;
+          height: 48px;
+          li {
+            margin-left: 16px;
+            a, button {
+              color: #757575;
+              font-size: 14px;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.admin {
+    h1 {
+      color: #333!important;
+    }
+  }
+}
+
+input {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(34,34,34,0.2);
+  box-sizing: border-box;
+  outline: 0;
+}
